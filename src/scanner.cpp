@@ -2,6 +2,26 @@
 
 #include "lox.hpp"
 
+std::map<std::string, TokenType> Scanner::keywords = 
+{
+    {"and", TokenType::AND},
+    {"class", TokenType::CLASS},
+    {"else", TokenType::ELSE},
+    {"false", TokenType::FALSE},
+    {"for", TokenType::FOR},
+    {"fun", TokenType::FUN},
+    {"if", TokenType::IF},
+    {"nil", TokenType::NIL},
+    {"or", TokenType::OR},
+    {"print", TokenType::PRINT},
+    {"return", TokenType::RETURN},
+    {"super", TokenType::SUPER},
+    {"this", TokenType::THIS},
+    {"true", TokenType::TRUE},
+    {"var", TokenType::VAR},
+    {"while", TokenType::WHILE},
+};
+
 Scanner::Scanner(std::string _source)
 {
     source = _source;
@@ -16,7 +36,8 @@ std::vector<Token> Scanner::scanTokens()
         scanToken();
     }
 
-    tokens.push_back(Token(TokenType::EOF_TOKEN, "", Literal(), line));
+    tokens.push_back(Token(TokenType::EOF_TOKEN, "", new Literal(), line));
+    return tokens;
 }
 
 bool Scanner::isAtEnd()
@@ -45,8 +66,34 @@ void Scanner::scanToken()
         case '<': addToken(match('=') ? TokenType::LESS_EQUAL : TokenType::LESS); break;      
         case '>': addToken(match('=') ? TokenType::GREATER_EQUAL : TokenType::GREATER); break;
 
+        case '/':
+            if(match('/')) // a single line comment
+                while(peek() != '\n' && !isAtEnd()) advance();
+            else
+                addToken(TokenType::SLASH);
+            break;
+
+        case ' ':
+        case '\r':
+        case '\t':
+            // Ignore whitespace, carriage return, and tab
+            break;
+
+        case '"': string(); break;
+
         default : 
-            Lox::error(line, "Unexpected character.");
+            if(isdigit(c))
+            {
+                number();
+            }
+            else if(isalpha(c))
+            {
+                identifier();
+            }
+            else
+            {
+                Lox::error(line, "Unexpected character.");
+            }
             break;
     }
 }
@@ -61,10 +108,10 @@ char Scanner::advance()
 void Scanner::addToken(TokenType _type)
 {
     // since the actual literal should be irrelevant, we can just insert a
-    addToken(_type, Literal());
+    addToken(_type, new Literal());
 }
 
-void Scanner::addToken(TokenType _type, Literal _literal)
+void Scanner::addToken(TokenType _type, Literal* _literal)
 {
     std::string text = source.substr(start, current - start);
     tokens.push_back(Token(_type, text, _literal, line));
@@ -77,4 +124,84 @@ bool Scanner::match(char _expected)
 
     current++;
     return true;
+}
+
+char Scanner::peek()
+{
+    if (isAtEnd()) return '\0';   
+    return source[current];
+}
+
+char Scanner::peekNext()
+{
+    if (current + 1 >= source.length()) return '\0';
+    return source[current + 1];
+}
+
+void Scanner::string()
+{
+    std::string value = "";
+
+    while(peek() != '"' && !isAtEnd())
+    {
+        if(peek() == '\n')
+            line++;
+        // append the char to the string
+        value += advance();
+    }
+
+    // hanging string, not-finished
+    if(isAtEnd())
+    {
+        Lox::error(line, "Unterminated string.");
+        return;
+    }
+
+    // the closing '"', char checking is done in the initial loop, it'll break when current
+    // char is '"' or at end, since the latter case is resolved above, we can safely assume
+    // current char is '"'
+    advance();
+
+    Literal* literal = new Literal();
+    literal->stringValue = value;
+
+    addToken(TokenType::STRING, literal);
+}
+
+void Scanner::number()
+{
+    while(isdigit(peek())) advance();
+
+    // look for floating point
+    if(peek() == '.' && isdigit(peekNext()))
+    {
+        // consume '.'
+        advance();
+
+        while(isdigit(peek())) advance();
+    }
+    Literal* literal = new Literal();
+    literal->doubleValue = std::stod(source.substr(start, current - start));
+
+    addToken(TokenType::NUMBER, literal);
+}
+
+void Scanner::identifier()
+{
+    std::string value = "";
+
+    while (isalnum(peek())) value += advance();
+
+    TokenType type;
+
+    if(keywords.find(value) != keywords.end())
+    {
+        type = keywords[value];
+    }
+    else
+    {
+        type = TokenType::IDENTIFIER;
+    }
+
+    addToken(type);
 }

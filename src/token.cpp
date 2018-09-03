@@ -1,6 +1,6 @@
 #include "token.hpp"
 
-Token::Token(TokenType _type, std::string _lexeme, Literal _literal, int _line)
+Token::Token(TokenType _type, std::string _lexeme, Literal* _literal, int _line)
 {
     type = _type;
     lexeme = _lexeme;
@@ -14,9 +14,15 @@ std::string Token::toString()
     s << "Type : " << (short)type << ", Lexeme : " << lexeme << ", Literal : " ;
     // switch on type tag
     if(type == TokenType::NUMBER)
-        s << literal.doubleValue;
-    else
-        s << literal.stringValue;
+    {
+        s << literal->doubleValue;
+    }
+    else if(type == TokenType::STRING)
+    {
+        s << literal->stringValue;
 
+        std::cout << "literal->stringValue = " << literal->stringValue << std::endl;
+    }
+    
     return s.str();
 }

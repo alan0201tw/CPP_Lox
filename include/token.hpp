@@ -34,10 +34,7 @@ union Literal
 {
     // for lox, only string and double value.
     // in other language, you might want to add integer value support.
-    
-    // also, using std::string here will make assignment complicated
-    // so I use the old char* here.
-    char* stringValue;
+    std::string stringValue;
     double doubleValue;
 
     Literal()
@@ -52,11 +49,11 @@ class Token final
 private:
     TokenType type;
     std::string lexeme;
-    Literal literal;
+    Literal* literal;
     int line;
 
 public:
-    Token(TokenType _type, std::string _lexeme, Literal _literal, int _line);
+    Token(TokenType _type, std::string _lexeme, Literal* _literal, int _line);
     ~Token() {}
 
     std::string toString();
