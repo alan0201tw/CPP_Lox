@@ -6,10 +6,7 @@
 class AstPrinter : public Visitor<std::string>
 {
 public:
-    std::string print(Expr* _expr)
-    {
-        return _expr->accept(this);
-    }
+    std::string print(Expr* _expr);
 };
 
 #endif
