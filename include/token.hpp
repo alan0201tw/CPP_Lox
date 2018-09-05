@@ -37,10 +37,10 @@ union Literal
     std::string stringValue;
     double doubleValue;
 
-    Literal()
-    {
-        std::memset(this, 0, sizeof(Literal));
-    }
+    Literal();
+    Literal(double _doubleValue);
+    Literal(std::string _stringValue);
+
     ~Literal() {}
 };
 

@@ -36,7 +36,7 @@ std::vector<Token> Scanner::scanTokens()
         scanToken();
     }
 
-    tokens.push_back(Token(TokenType::EOF_TOKEN, "", new Literal(), line));
+    tokens.push_back(Token(TokenType::EOF_TOKEN, "", nullptr, line));
     return tokens;
 }
 
@@ -108,7 +108,7 @@ char Scanner::advance()
 void Scanner::addToken(TokenType _type)
 {
     // since the actual literal should be irrelevant, we can just insert a
-    addToken(_type, new Literal());
+    addToken(_type, nullptr);
 }
 
 void Scanner::addToken(TokenType _type, Literal* _literal)
@@ -162,8 +162,7 @@ void Scanner::string()
     // current char is '"'
     advance();
 
-    Literal* literal = new Literal();
-    literal->stringValue = value;
+    Literal* literal = new Literal(value);
 
     addToken(TokenType::STRING, literal);
 }
@@ -180,8 +179,7 @@ void Scanner::number()
 
         while(isdigit(peek())) advance();
     }
-    Literal* literal = new Literal();
-    literal->doubleValue = std::stod(source.substr(start, current - start));
+    Literal* literal = new Literal(std::stod(source.substr(start, current - start)));
 
     addToken(TokenType::NUMBER, literal);
 }
