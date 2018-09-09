@@ -46,7 +46,7 @@ union Literal
 
 class Token final
 {
-private:
+public:
     TokenType type;
     std::string lexeme;
     Literal* literal;

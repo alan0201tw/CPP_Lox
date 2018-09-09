@@ -21,7 +21,7 @@ public:
 
 class Assign : public Expr
 {
-private:
+public:
     Token* name;
     Expr* value;
 
@@ -33,10 +33,11 @@ public:
 
 class Binary : public Expr
 {
-private:
+public:
     Expr* left;
     Token* optr;
     Expr* right;
+
 public:
     Binary(Expr* _left, Token* _optr, Expr* _right);
 
@@ -45,10 +46,11 @@ public:
 
 class Call : public Expr
 {
-private:
+public:
     Expr* callee;
     Token* paren;
     std::vector<Expr>* arguments;
+
 public:
     Call(Expr* _callee, Token* _paren, std::vector<Expr>* _arguments);
 
@@ -57,9 +59,10 @@ public:
 
 class Get : public Expr
 {
-private:
+public:
     Expr* object;
     Token* name;
+
 public:
     Get(Expr* _object, Token* _name);
 
@@ -68,8 +71,9 @@ public:
 
 class Grouping : public Expr
 {
-private:
+public:
     Expr* expression;
+
 public:
     Grouping(Expr* _expression);
 
@@ -78,20 +82,28 @@ public:
 
 class LiteralExpr : public Expr
 {
-private:
-    Literal* literal;
 public:
-    LiteralExpr(Literal* _literal);
+
+    // in jlox, literal is stored using superclass-Object, and the toString method lives as an virtual function,
+    // in out cpplox, we need an extra tag to determine the type of a literal object, we might as well just store
+    // the entire Token object here.
+
+    // Literal* literal;
+    Token* value;
+
+public:
+    LiteralExpr(Token* _value);
 
     virtual std::string accept (Visitor<std::string>* visitor) override;
 };
 
 class Logical : public Expr
 {
-private:
+public:
     Expr* left;
     Token* optr;
     Expr* right;
+
 public:
     Logical(Expr* _left, Token* _optr, Expr* _right);
 
@@ -100,10 +112,11 @@ public:
 
 class Set : public Expr
 {
-private:
+public:
     Expr* object;
     Token* name;
     Expr* value;
+
 public:
     Set(Expr* _object, Token* _name, Expr* _value);
 
@@ -112,9 +125,10 @@ public:
 
 class Super : public Expr
 {
-private:
+public:
     Token* keyword;
     Token* method;
+
 public:
     Super(Token* _keyword, Token* _method);
 
@@ -123,8 +137,9 @@ public:
 
 class This : public Expr
 {
-private:
+public:
     Token* keyword;
+
 public:
     This(Token* _keyword);
 
@@ -133,9 +148,10 @@ public:
 
 class Unary : public Expr
 {
-private:
+public:
     Token* optr;
     Expr* right;
+
 public:
     Unary(Token* _optr, Expr* _right);
 
@@ -144,8 +160,9 @@ public:
 
 class Variable : public Expr
 {
-private:
+public:
     Token* name;
+    
 public:
     Variable(Token* _name);
 

@@ -56,9 +56,9 @@ std::string Grouping::accept(Visitor<std::string>* visitor)
     return visitor->visitGroupingExpr(this);
 }
 
-LiteralExpr::LiteralExpr(Literal* _literal)
+LiteralExpr::LiteralExpr(Token* _value)
 {
-    literal = _literal;
+    value = _value;
 }
 
 std::string LiteralExpr::accept(Visitor<std::string>* visitor)
