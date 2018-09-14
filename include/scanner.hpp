@@ -14,7 +14,7 @@ private:
     static std::map<std::string, TokenType> keywords;
 
     std::string source;
-    std::vector<Token> tokens;
+    std::vector<Token*> tokens;
 
     size_t start = 0;
     size_t current = 0;
@@ -35,7 +35,7 @@ private:
 
 public:
     Scanner(std::string _source);
-    std::vector<Token> scanTokens();
+    std::vector<Token*> scanTokens();
 };
 
 #endif

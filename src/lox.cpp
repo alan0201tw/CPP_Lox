@@ -6,6 +6,8 @@
 
 #include "token.hpp"
 #include "scanner.hpp"
+#include "parser.hpp"
+#include "astPrinter.hpp"
 
 // initializing static fields
 bool Lox::hadError = false;
@@ -55,17 +57,40 @@ void Lox::run(std::string source)
     // std::cout << "running source = " << source << std::endl;
 
     Scanner scanner(source);
-    std::vector<Token> tokens = scanner.scanTokens();
+    std::vector<Token*> tokens = scanner.scanTokens();
+
+    // add parsing
+    Parser* parser = new Parser(tokens);
+    Expr* expression = parser->parse();
+
+    // Stop if there was a syntax error.
+    if(hadError) return;
+
+    AstPrinter* printer = new AstPrinter();
+    std::cout << printer->print(expression) << std::endl;
 
     for(size_t i=0; i < tokens.size(); i++)
     {
-        std::cout << "Token " << i << " : " << tokens[i].toString() << std::endl;
+        std::cout << "Token " << i << " : " << tokens[i]->toString() << std::endl;
     }
 }
 
 void Lox::error(int line, std::string message)
 {
     report(line,"",message);
+}
+
+void Lox::error(Token* _token, std::string _message)
+{
+    if(_token->type == TokenType::EOF_TOKEN)
+    {
+        report(_token->line, " at end", _message);
+    }
+    else
+    {
+        std::string where = " at '" + _token->lexeme + "'";
+        report(_token->line, where, _message);
+    }
 }
 
 void Lox::report(int line, std::string where, std::string message)

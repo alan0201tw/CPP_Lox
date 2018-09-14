@@ -2,6 +2,7 @@
 #define CPPLOX
 
 #include <iostream>
+#include "token.hpp"
 
 class Lox
 {
@@ -14,6 +15,8 @@ public:
     static void runPrompt();
     // for logging error messages
     static void error(int line, std::string message);
+    // for logging errors in Parsing process
+    static void error(Token* _token, std::string _message);
 private:
     static void run(std::string source);
     // report
