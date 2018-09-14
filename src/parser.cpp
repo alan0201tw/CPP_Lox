@@ -95,9 +95,9 @@ Expr* Parser::primary()
 {
     // in cpplox, instead of the master base class of Object in other languages, we use a union object for sotring
     // different values, in this case we store bool value false as a double value of false in cpp.
-    if(match({TokenType::FALSE})) return new LiteralExpr(new Token(TokenType::FALSE, "false", new Literal(false), 0));
-    if(match({TokenType::TRUE})) return new LiteralExpr(new Token(TokenType::TRUE, "true", new Literal(true), 0));
-    if(match({TokenType::NIL})) return new LiteralExpr(new Token(TokenType::NIL, "nil", new Literal(nullptr), 0));
+    if(match({TokenType::FALSE})) return new LiteralExpr(new Token(TokenType::FALSE, "false", nullptr, 0));
+    if(match({TokenType::TRUE})) return new LiteralExpr(new Token(TokenType::TRUE, "true", nullptr, 0));
+    if(match({TokenType::NIL})) return new LiteralExpr(new Token(TokenType::NIL, "nil", nullptr, 0));
 
     if(match({TokenType::NUMBER, TokenType::STRING}))
     {

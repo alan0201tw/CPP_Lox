@@ -12,7 +12,8 @@ class Expr
 {
 public:
     // set function to 0 to make it an abstract function
-    virtual std::string accept(Visitor<std::string>* visitor) = 0;
+    virtual std::string accept(Visitor<std::string>* visitor) = 0; // this is for AstPrinter
+    virtual Token* accept(Visitor<Token*>* visitor) = 0;
 
     // I use this workaround since the tutorial uses virtual generic methods,
     // which isn't possible in C++. After doing some research, I come up with this
@@ -29,6 +30,7 @@ public:
     Assign(Token* _name, Expr* _value);
 
     virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
 class Binary : public Expr
@@ -42,6 +44,7 @@ public:
     Binary(Expr* _left, Token* _optr, Expr* _right);
 
     virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
 class Call : public Expr
@@ -55,6 +58,7 @@ public:
     Call(Expr* _callee, Token* _paren, std::vector<Expr>* _arguments);
 
     virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
 class Get : public Expr
@@ -67,6 +71,7 @@ public:
     Get(Expr* _object, Token* _name);
 
     virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
 class Grouping : public Expr
@@ -78,6 +83,7 @@ public:
     Grouping(Expr* _expression);
 
     virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
 class LiteralExpr : public Expr
@@ -95,6 +101,7 @@ public:
     LiteralExpr(Token* _value);
 
     virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
 class Logical : public Expr
@@ -108,6 +115,7 @@ public:
     Logical(Expr* _left, Token* _optr, Expr* _right);
 
     virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
 class Set : public Expr
@@ -121,6 +129,7 @@ public:
     Set(Expr* _object, Token* _name, Expr* _value);
 
     virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
 class Super : public Expr
@@ -133,6 +142,7 @@ public:
     Super(Token* _keyword, Token* _method);
 
     virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
 class This : public Expr
@@ -144,6 +154,7 @@ public:
     This(Token* _keyword);
 
     virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
 class Unary : public Expr
@@ -156,6 +167,7 @@ public:
     Unary(Token* _optr, Expr* _right);
 
     virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
 class Variable : public Expr
@@ -167,6 +179,7 @@ public:
     Variable(Token* _name);
 
     virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
 // interface for visiting Exprs
