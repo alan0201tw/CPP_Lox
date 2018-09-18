@@ -71,6 +71,16 @@ Token* Interpreter::visitBinaryExpr(Binary* expr)
         return doubleToken(left->literal->doubleValue - right->literal->doubleValue);
     case TokenType::SLASH :
         checkNumberOperands(expr->optr, left, right);
+        // TODO : handle divide by 0 error!
+        // currenlty it'll just return inf as a double value since we use double to represent all numbers in lox.
+
+        // in c++, divide by 0 on both int and float(double) is undefined behavior.
+        // some compiler that supports IEEE floating point standard will set float to +inf or -inf,
+        // and for int it'll send signal(interrupt), which can be handled by registering callback functions,
+        // but mostly it's an error on hardware level. The default handling by OS is terminating process. When handled,
+        // the handling function will be executed, before terminating. It should only be used for debugging, but not part
+        // of actual program.
+
         return doubleToken(left->literal->doubleValue / right->literal->doubleValue);
     case TokenType::STAR :
         checkNumberOperands(expr->optr, left, right);
