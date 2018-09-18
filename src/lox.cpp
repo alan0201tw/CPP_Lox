@@ -11,6 +11,8 @@
 
 // initializing static fields
 bool Lox::hadError = false;
+bool Lox::hadRuntimeError = false;
+Interpreter* Lox::interpreter = new Interpreter();
 
 void Lox::runFile(const char* file_name)
 {
@@ -31,6 +33,10 @@ void Lox::runFile(const char* file_name)
         if(hadError == true)
         {
             std::exit(65);
+        }
+        if(hadRuntimeError == true)
+        {
+            std::exit(70);
         }
 
         return;
@@ -65,7 +71,7 @@ void Lox::run(std::string source)
 
     // Stop if there was a syntax error.
     if(hadError) return;
-
+    /*
     AstPrinter* printer = new AstPrinter();
     std::cout << printer->print(expression) << std::endl;
 
@@ -73,6 +79,8 @@ void Lox::run(std::string source)
     {
         std::cout << "Token " << i << " : " << tokens[i]->toString() << std::endl;
     }
+    */
+    interpreter->interpret(expression);
 }
 
 void Lox::error(int line, std::string message)
@@ -91,6 +99,12 @@ void Lox::error(Token* _token, std::string _message)
         std::string where = " at '" + _token->lexeme + "'";
         report(_token->line, where, _message);
     }
+}
+
+void Lox::runtimeError(RuntimeError& error)
+{
+    std::cerr << error.what() << "\n[line" << error.token->line << "]";
+    hadRuntimeError = true;
 }
 
 void Lox::report(int line, std::string where, std::string message)

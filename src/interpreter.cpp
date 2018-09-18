@@ -1,4 +1,21 @@
 #include "interpreter.hpp"
+#include "loxException.hpp"
+#include "lox.hpp"
+
+void Interpreter::interpret(Expr* expr)
+{
+    try
+    {
+        Token* value = evaluate(expr);
+        // in jlox, there is an additional stringify method to converet Object in Java to string.
+        // in cpplox, since we represent values with Tokens, we can just call the toString method.
+        std::cout << value->toString() << std::endl;
+    }
+    catch(RuntimeError& error)
+    {
+        Lox::runtimeError(error);
+    }
+}
 
 // Visit methods for visiting nodes in AST
 
@@ -26,6 +43,9 @@ Token* Interpreter::visitUnaryExpr(Unary* expr)
     }
     case TokenType::MINUS :
     {
+        // detecting runtime errors
+        checkNumberOperand(expr->optr, right);
+
         double value = -(right->literal->doubleValue);
         return doubleToken(value);
         break;
@@ -47,10 +67,13 @@ Token* Interpreter::visitBinaryExpr(Binary* expr)
     switch(expr->optr->type)
     {
     case TokenType::MINUS :
+        checkNumberOperands(expr->optr, left, right);
         return doubleToken(left->literal->doubleValue - right->literal->doubleValue);
     case TokenType::SLASH :
+        checkNumberOperands(expr->optr, left, right);
         return doubleToken(left->literal->doubleValue / right->literal->doubleValue);
     case TokenType::STAR :
+        checkNumberOperands(expr->optr, left, right);
         return doubleToken(left->literal->doubleValue * right->literal->doubleValue);
     // for + optr, it is supported for both string and number type. So we need to do a type check here.
     case TokenType::PLUS :
@@ -58,15 +81,21 @@ Token* Interpreter::visitBinaryExpr(Binary* expr)
             return doubleToken(left->literal->doubleValue + right->literal->doubleValue);
         else if(left->type == TokenType::STRING && right->type == TokenType::STRING)
             return stringToken(left->literal->stringValue + right->literal->stringValue);
+        // if both cases fail, throw runtime error
+        throw new RuntimeError(expr->optr, "Operands must be two numbers or two strings.");
 
     // Comparison optrs
     case TokenType::GREATER :
+        checkNumberOperands(expr->optr, left, right);
         return boolToken(left->literal->doubleValue > right->literal->doubleValue);
     case TokenType::GREATER_EQUAL :
+        checkNumberOperands(expr->optr, left, right);
         return boolToken(left->literal->doubleValue >= right->literal->doubleValue);
     case TokenType::LESS :
+        checkNumberOperands(expr->optr, left, right);
         return boolToken(left->literal->doubleValue < right->literal->doubleValue);
     case TokenType::LESS_EQUAL :
+        checkNumberOperands(expr->optr, left, right);
         return boolToken(left->literal->doubleValue <= right->literal->doubleValue);
 
     // Equality optrs
@@ -120,6 +149,20 @@ bool Interpreter::isEqual(Token* a, Token* b)
     default :
         return true;
     }
+}
+
+// runtime error detection and checking
+
+void Interpreter::checkNumberOperand(Token* _optr, Token* _operand)
+{
+    if(_operand->type == TokenType::NUMBER) return;
+    throw new RuntimeError(_optr, "Operand must be a number.");
+}
+
+void Interpreter::checkNumberOperands(Token* _optr, Token* _left, Token* _right)
+{
+    if(_left->type == TokenType::NUMBER && _right->type == TokenType::NUMBER) return;
+    throw new RuntimeError(_optr, "Operand must be a numbers.");
 }
 
 // my utility methods

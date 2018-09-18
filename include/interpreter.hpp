@@ -10,23 +10,29 @@
 class Interpreter : public Visitor<Token*>
 {
 public:
-    Token* visitAssignExpr(Assign* expr);
-    Token* visitBinaryExpr(Binary* expr);         
-    Token* visitCallExpr(Call* expr);
-    Token* visitGetExpr(Get* expr);
+    void interpret(Expr* expr);
+
+    Token* visitAssignExpr(Assign* expr) { throw std::logic_error("Function not yet implemented."); };
+    Token* visitBinaryExpr(Binary* expr);
+    Token* visitCallExpr(Call* expr) { throw std::logic_error("Function not yet implemented."); };
+    Token* visitGetExpr(Get* expr) { throw std::logic_error("Function not yet implemented."); };
     Token* visitGroupingExpr(Grouping* expr);
     Token* visitLiteralExpr(LiteralExpr* expr);
-    Token* visitLogicalExpr(Logical* expr);
-    Token* visitSetExpr(Set* expr);
-    Token* visitSuperExpr(Super* expr);
-    Token* visitThisExpr(This* expr);
+    Token* visitLogicalExpr(Logical* expr) { throw std::logic_error("Function not yet implemented."); };
+    Token* visitSetExpr(Set* expr) { throw std::logic_error("Function not yet implemented."); };
+    Token* visitSuperExpr(Super* expr) { throw std::logic_error("Function not yet implemented."); };
+    Token* visitThisExpr(This* expr) { throw std::logic_error("Function not yet implemented."); };
     Token* visitUnaryExpr(Unary* expr);
-    Token* visitVariableExpr(Variable* expr);
+    Token* visitVariableExpr(Variable* expr) { throw std::logic_error("Function not yet implemented."); };
 
 private:
     Token* evaluate(Expr* expr);
     bool isTruthy(Token* _token);
     bool isEqual(Token* a, Token* b);
+
+    // runtime error detection and checking
+    void checkNumberOperand(Token* _optr, Token* _operand);
+    void checkNumberOperands(Token* _optr, Token* _left, Token* _right);
 
     // my additional utility methods
     static Token* boolToken(bool _value); // return a Token representing given bool value
