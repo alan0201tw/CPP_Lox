@@ -21,15 +21,13 @@ Token* Interpreter::visitUnaryExpr(Unary* expr)
     case TokenType::BANG :
     {
         bool value = !isTruthy(right);
-        if(value == true)
-            return new Token(TokenType::TRUE, "", nullptr, 0);
-        return new Token(TokenType::FALSE, "", nullptr, 0);
+        return boolToken(value);
         break;
     }
     case TokenType::MINUS :
     {
         double value = -(right->literal->doubleValue);
-        return new Token(TokenType::NUMBER, "", new Literal(value), 0);
+        return doubleToken(value);
         break;
     }
     // there are only one unary optr in lox, which is MINUS, so if we get other types here, we should just break it.
@@ -49,38 +47,33 @@ Token* Interpreter::visitBinaryExpr(Binary* expr)
     switch(expr->optr->type)
     {
     case TokenType::MINUS :
-        return new Token(TokenType::NUMBER, "", new Literal(left->literal->doubleValue - right->literal->doubleValue), 0);
+        return doubleToken(left->literal->doubleValue - right->literal->doubleValue);
     case TokenType::SLASH :
-        return new Token(TokenType::NUMBER, "", new Literal(left->literal->doubleValue / right->literal->doubleValue), 0);
+        return doubleToken(left->literal->doubleValue / right->literal->doubleValue);
     case TokenType::STAR :
-        return new Token(TokenType::NUMBER, "", new Literal(left->literal->doubleValue * right->literal->doubleValue), 0);
+        return doubleToken(left->literal->doubleValue * right->literal->doubleValue);
     // for + optr, it is supported for both string and number type. So we need to do a type check here.
     case TokenType::PLUS :
         if(left->type == TokenType::NUMBER && right->type == TokenType::NUMBER)
-            return new Token(TokenType::NUMBER, "", new Literal(left->literal->doubleValue + right->literal->doubleValue), 0);
+            return doubleToken(left->literal->doubleValue + right->literal->doubleValue);
         else if(left->type == TokenType::STRING && right->type == TokenType::STRING)
-            return new Token(TokenType::NUMBER, "", new Literal(left->literal->stringValue + right->literal->stringValue), 0);
+            return stringToken(left->literal->stringValue + right->literal->stringValue);
 
     // Comparison optrs
-    case TokenType::GREATER:
-        if(left->literal->doubleValue > right->literal->doubleValue)
-            return new Token(TokenType::TRUE, "", nullptr, 0);
-        return new Token(TokenType::FALSE, "", nullptr, 0);
-    case TokenType::GREATER_EQUAL:
-        if(left->literal->doubleValue >= right->literal->doubleValue)
-            return new Token(TokenType::TRUE, "", nullptr, 0);
-        return new Token(TokenType::FALSE, "", nullptr, 0);
-    case TokenType::LESS:
-        if(left->literal->doubleValue < right->literal->doubleValue)
-            return new Token(TokenType::TRUE, "", nullptr, 0);
-        return new Token(TokenType::FALSE, "", nullptr, 0);
-    case TokenType::LESS_EQUAL:
-        if(left->literal->doubleValue <= right->literal->doubleValue)
-            return new Token(TokenType::TRUE, "", nullptr, 0);
-        return new Token(TokenType::FALSE, "", nullptr, 0);
+    case TokenType::GREATER :
+        return boolToken(left->literal->doubleValue > right->literal->doubleValue);
+    case TokenType::GREATER_EQUAL :
+        return boolToken(left->literal->doubleValue >= right->literal->doubleValue);
+    case TokenType::LESS :
+        return boolToken(left->literal->doubleValue < right->literal->doubleValue);
+    case TokenType::LESS_EQUAL :
+        return boolToken(left->literal->doubleValue <= right->literal->doubleValue);
 
     // Equality optrs
-    // TODO : implement
+    case TokenType::BANG_EQUAL :
+        return boolToken(!isEqual(left, right));
+    case TokenType::EQUAL_EQUAL :
+        return boolToken(isEqual(left, right));
 
     default:
         break;
@@ -104,4 +97,47 @@ bool Interpreter::isTruthy(Token* _token)
     if(_token->type == TokenType::FALSE) return false;
 
     return true;
+}
+
+bool Interpreter::isEqual(Token* a, Token* b)
+{
+    // nil == nil ( nil is the null value in lox )
+    if(a == nullptr && b == nullptr) return true;
+    if(a == nullptr) return false;
+
+    // if types are different, return false
+    if(a->type != b->type) return false;
+
+    // if types are the same, there are 2 cases where we need to compare the actual value
+    // when they're numbers and when they're strings.
+    // Another possible value type is bool, but we can differ them with TokenType, so no need to compare value.
+    switch(a->type)
+    {
+    case TokenType::NUMBER :
+        return a->literal->doubleValue == b->literal->doubleValue;
+    case TokenType::STRING :
+        return a->literal->stringValue == b->literal->stringValue;
+    default :
+        return true;
+    }
+}
+
+// my utility methods
+
+Token* Interpreter::boolToken(bool _value)
+{
+    if(_value == true)
+        return new Token(TokenType::TRUE, "true", nullptr, 0);
+    return new Token(TokenType::FALSE, "false", nullptr, 0);
+}
+
+Token* Interpreter::doubleToken(double _value)
+{
+    return new Token(TokenType::NUMBER, std::to_string(_value), new Literal(_value), 0);
+}
+
+Token* Interpreter::stringToken(std::string _value)
+{
+    // the lexeme will be "_value"
+    return new Token(TokenType::STRING, "\"" + _value + "\"", new Literal(_value), 0);
 }

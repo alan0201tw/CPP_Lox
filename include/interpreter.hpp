@@ -26,6 +26,12 @@ public:
 private:
     Token* evaluate(Expr* expr);
     bool isTruthy(Token* _token);
+    bool isEqual(Token* a, Token* b);
+
+    // my additional utility methods
+    static Token* boolToken(bool _value); // return a Token representing given bool value
+    static Token* doubleToken(double _value); // return a Token representing given double value
+    static Token* stringToken(std::string _value); // return a Token representing given string value
 };
 
 #endif
