@@ -11,7 +11,7 @@ void Interpreter::interpret(Expr* expr)
         // in cpplox, since we represent values with Tokens, we can just call the toString method.
         std::cout << value->toString() << std::endl;
     }
-    catch(RuntimeError& error)
+    catch(RuntimeError* error)
     {
         Lox::runtimeError(error);
     }
@@ -80,6 +80,8 @@ Token* Interpreter::visitBinaryExpr(Binary* expr)
         // but mostly it's an error on hardware level. The default handling by OS is terminating process. When handled,
         // the handling function will be executed, before terminating. It should only be used for debugging, but not part
         // of actual program.
+        if(right->literal->doubleValue == 0)
+            throw new RuntimeError(expr->optr, "Division by zero is forbidden in Lox.");
 
         return doubleToken(left->literal->doubleValue / right->literal->doubleValue);
     case TokenType::STAR :

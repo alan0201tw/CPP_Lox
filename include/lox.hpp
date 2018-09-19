@@ -21,7 +21,7 @@ public:
     // for logging errors in Parsing process
     static void error(Token* _token, std::string _message);
     // for logging runtime errors
-    static void runtimeError(RuntimeError& error);
+    static void runtimeError(RuntimeError* error);
 private:
 
     static Interpreter* interpreter;
