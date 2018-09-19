@@ -2,14 +2,19 @@
 #include "loxException.hpp"
 #include "lox.hpp"
 
-void Interpreter::interpret(Expr* expr)
+void Interpreter::interpret(std::vector<Stmt*> statements)
 {
     try
     {
-        Token* value = evaluate(expr);
+        //Token* value = evaluate(expr);
         // in jlox, there is an additional stringify method to converet Object in Java to string.
         // in cpplox, since we represent values with Tokens, we can just call the toString method.
-        std::cout << value->toString() << std::endl;
+        //std::cout << value->toString() << std::endl;
+
+        for(size_t i = 0; i < statements.size(); i++)
+        {
+            execute(statements[i]);
+        }
     }
     catch(RuntimeError* error)
     {
@@ -124,6 +129,20 @@ Token* Interpreter::visitBinaryExpr(Binary* expr)
     return nullptr;
 }
 
+// Visit methods for visiting statements
+void Interpreter::visitExpressionStmt(Expression* stmt)
+{
+    evaluate(stmt->expr);
+    return;
+}
+
+void Interpreter::visitPrintStmt(Print* stmt)
+{
+    Token* value = evaluate(stmt->expr);
+    std::cout << value->toString() << std::endl;
+    return;
+}
+
 // utility methods
 Token* Interpreter::evaluate(Expr* expr)
 {
@@ -161,6 +180,12 @@ bool Interpreter::isEqual(Token* a, Token* b)
     default :
         return true;
     }
+}
+
+// hepler methods for statements
+void Interpreter::execute(Stmt* _stmt)
+{
+    _stmt->accept(this);
 }
 
 // runtime error detection and checking

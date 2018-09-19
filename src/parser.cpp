@@ -1,7 +1,8 @@
-#include "parser.hpp"
-
 #include <exception>
+
+#include "parser.hpp"
 #include "lox.hpp"
+
 
 Parser::Parser(std::vector<Token*> _tokens)
 {
@@ -115,6 +116,29 @@ Expr* Parser::primary()
     throw error(peek(), "Expect expression.");
 }
 
+// statement methods
+
+Stmt* Parser::statement()
+{
+    if(match({TokenType::PRINT})) return printStatement();
+
+    return expressionStatement();
+}
+
+Stmt* Parser::printStatement()
+{
+    Expr* value = expression();
+    consume(TokenType::SEMICOLON, "Expect ';' after value.");
+    return new Print(value);
+}
+
+Stmt* Parser::expressionStatement()
+{
+    Expr* expr = expression();
+    consume(TokenType::SEMICOLON, "Expect ';' after expression.");
+    return new Expression(expr);
+}
+
 // utility methods
 
 bool Parser::match(std::vector<TokenType> _types)
@@ -132,8 +156,8 @@ bool Parser::match(std::vector<TokenType> _types)
 
 bool Parser::check(TokenType type)
 {
-    if (isAtEnd()) return false;         
-    return peek()->type == type;          
+    if (isAtEnd()) return false;
+    return peek()->type == type;
 }
 
 Token* Parser::advance()
@@ -203,14 +227,13 @@ void Parser::synchronize()
 
 // The main parse method
 
-Expr* Parser::parse()
+std::vector<Stmt*> Parser::parse()
 {
-    try
+    std::vector<Stmt*> statements;
+    while(!isAtEnd())
     {
-        return expression();
+        statements.push_back(statement());
     }
-    catch(ParseError& e)
-    {
-        return nullptr;
-    }
+
+    return statements;
 }

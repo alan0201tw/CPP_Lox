@@ -78,6 +78,11 @@ void Scanner::scanToken()
         case '\t':
             // Ignore whitespace, carriage return, and tab
             break;
+        
+        // when reading a new line character, ignore it and update the line count
+        case '\n':                                   
+            line++;                                    
+            break;
 
         case '"': string(); break;
 
@@ -186,11 +191,13 @@ void Scanner::number()
 
 void Scanner::identifier()
 {
-    std::string value = "";
+    std::string value;
 
-    while (isalnum(peek())) value += advance();
+    while (isalnum(peek())) advance();
 
     TokenType type;
+    
+    value = source.substr(start, current - start);
 
     if(keywords.find(value) != keywords.end())
     {

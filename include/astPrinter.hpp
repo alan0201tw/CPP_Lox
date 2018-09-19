@@ -5,7 +5,7 @@
 
 #include <vector>
 
-class AstPrinter : public Visitor<std::string>
+class AstPrinter : public Expr::Visitor<std::string>
 {
 public:
     std::string print(Expr* _expr);

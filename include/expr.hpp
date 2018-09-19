@@ -5,19 +5,20 @@
 
 #include <vector>
 
-template<class R> class Visitor;
-
 // interface for Expr classes
 class Expr
 {
 public:
+    // Forward declaration of the Visitor interface
+    template<class R> class Visitor;
+
     // set function to 0 to make it an abstract function
     virtual std::string accept(Visitor<std::string>* visitor) = 0; // this is for AstPrinter
-    virtual Token* accept(Visitor<Token*>* visitor) = 0;
+    virtual Token* accept(Visitor<Token*>* visitor) = 0; // for interpreter
 
     // I use this workaround since the tutorial uses virtual generic methods,
     // which isn't possible in C++. After doing some research, I come up with this
-    // not-so-good approach. Please don't judge me for this Q_Q
+    // not-so-good approach. Please don't judge me for this. Q_Q
 };
 
 class Assign : public Expr
@@ -184,7 +185,7 @@ public:
 
 // interface for visiting Exprs
 template<class R>
-class Visitor
+class Expr::Visitor
 {
 public:
     virtual R visitAssignExpr(Assign* expr) = 0;

@@ -5,8 +5,8 @@
 
 #include "token.hpp"
 #include "expr.hpp"
-
 #include "loxException.hpp"
+#include "stmt.hpp"
 
 class Parser
 {
@@ -22,6 +22,11 @@ private:
     Expr* multiplication();
     Expr* unary();
     Expr* primary();
+
+    // added rule for statements
+    Stmt* statement();
+    Stmt* printStatement();
+    Stmt* expressionStatement();
 
     // utility methods
 
@@ -40,7 +45,7 @@ private:
 
 public:
     Parser(std::vector<Token*> _tokens);
-    Expr* parse();
+    std::vector<Stmt*> parse();
 };
 
 #endif

@@ -67,7 +67,7 @@ void Lox::run(std::string source)
 
     // add parsing
     Parser* parser = new Parser(tokens);
-    Expr* expression = parser->parse();
+    std::vector<Stmt*> statements = parser->parse();
 
     // Stop if there was a syntax error.
     if(hadError) return;
@@ -80,7 +80,7 @@ void Lox::run(std::string source)
         std::cout << "Token " << i << " : " << tokens[i]->toString() << std::endl;
     }
     */
-    interpreter->interpret(expression);
+    interpreter->interpret(statements);
 }
 
 void Lox::error(int line, std::string message)
