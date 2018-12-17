@@ -38,9 +38,9 @@ class Var : public Stmt
 {
 public:
     Token* name;
-    Expr* expr;
+    Expr* initializer;
 
-    Var(Token* _name, Expr* _expr);
+    Var(Token* _name, Expr* _initializer);
 
     virtual void accept(Visitor<void>* visitor) override;
 };

@@ -30,7 +30,7 @@ public:
 public:
     Assign(Token* _name, Expr* _value);
 
-    virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
@@ -44,7 +44,7 @@ public:
 public:
     Binary(Expr* _left, Token* _optr, Expr* _right);
 
-    virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
@@ -58,7 +58,7 @@ public:
 public:
     Call(Expr* _callee, Token* _paren, std::vector<Expr>* _arguments);
 
-    virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
@@ -71,7 +71,7 @@ public:
 public:
     Get(Expr* _object, Token* _name);
 
-    virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
@@ -83,7 +83,7 @@ public:
 public:
     Grouping(Expr* _expression);
 
-    virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
@@ -101,7 +101,7 @@ public:
 public:
     LiteralExpr(Token* _value);
 
-    virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
@@ -115,7 +115,7 @@ public:
 public:
     Logical(Expr* _left, Token* _optr, Expr* _right);
 
-    virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
@@ -129,7 +129,7 @@ public:
 public:
     Set(Expr* _object, Token* _name, Expr* _value);
 
-    virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
@@ -142,7 +142,7 @@ public:
 public:
     Super(Token* _keyword, Token* _method);
 
-    virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
@@ -154,7 +154,7 @@ public:
 public:
     This(Token* _keyword);
 
-    virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
@@ -167,7 +167,7 @@ public:
 public:
     Unary(Token* _optr, Expr* _right);
 
-    virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 
@@ -179,7 +179,7 @@ public:
 public:
     Variable(Token* _name);
 
-    virtual std::string accept (Visitor<std::string>* visitor) override;
+    virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
 };
 

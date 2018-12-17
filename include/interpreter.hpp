@@ -3,6 +3,7 @@
 
 #include "expr.hpp"
 #include "stmt.hpp"
+#include "environment.hpp"
 
 /**
  * in jlox, the return type of the visitor is a Object, which can be any type in Java.
@@ -17,7 +18,7 @@ public:
     void interpret(std::vector<Stmt*> statements);
 
     // Visit Expr methods
-    Token* visitAssignExpr(Assign* expr) { throw std::logic_error("Function not yet implemented."); };
+    Token* visitAssignExpr(Assign* expr);
     Token* visitBinaryExpr(Binary* expr);
     Token* visitCallExpr(Call* expr) { throw std::logic_error("Function not yet implemented."); };
     Token* visitGetExpr(Get* expr) { throw std::logic_error("Function not yet implemented."); };
@@ -28,7 +29,7 @@ public:
     Token* visitSuperExpr(Super* expr) { throw std::logic_error("Function not yet implemented."); };
     Token* visitThisExpr(This* expr) { throw std::logic_error("Function not yet implemented."); };
     Token* visitUnaryExpr(Unary* expr);
-    Token* visitVariableExpr(Variable* expr) { throw std::logic_error("Function not yet implemented."); };
+    Token* visitVariableExpr(Variable* expr);
 
     // Visit Stmt methods
     //void visitBlockStmt(Block* stmt);
@@ -57,6 +58,8 @@ private:
     static Token* boolToken(bool _value); // return a Token representing given bool value
     static Token* doubleToken(double _value); // return a Token representing given double value
     static Token* stringToken(std::string _value); // return a Token representing given string value
+
+    Environment* environment = new Environment();
 };
 
 #endif

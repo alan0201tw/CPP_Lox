@@ -22,6 +22,7 @@ private:
     Expr* multiplication();
     Expr* unary();
     Expr* primary();
+    Expr* assignment();
 
     // added rule for statements
     Stmt* statement();

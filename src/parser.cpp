@@ -11,7 +11,33 @@ Parser::Parser(std::vector<Token*> _tokens)
 
 Expr* Parser::expression()
 {
-    return equality();
+    //return equality();
+    return assignment();
+}
+
+Expr* Parser::assignment()
+{
+    // the l-value, this should be of type Variable(a sub-class of Expr)
+    // if not, it's propably syntax error.
+    Expr* expr = equality();
+
+    if(match({TokenType::EQUAL}))
+    {
+        Token* equals = previous();
+        Expr* value = assignment();
+
+        // try to cast expr to a variable sub-class
+        if(Variable* var = dynamic_cast<Variable*>(expr))
+        {
+            Token* name = var->name;
+            //std::cout << name << " " << value << std::endl;
+            return new Assign(name, value);
+        }
+        // if the l-value is not a Variable, throw error
+        error(equals, "Invalid assignment target.");
+    }
+
+    return expr;
 }
 
 Expr* Parser::equality()
@@ -153,7 +179,7 @@ Stmt* Parser::declarationStatement()
 
         return statement();
     }
-    catch(ParseError error)
+    catch(ParseError* error)
     {
         synchronize();
         return nullptr;

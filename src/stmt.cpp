@@ -20,10 +20,10 @@ void Print::accept(Visitor<void>* visitor)
     return visitor->visitPrintStmt(this);
 }
 
-Var::Var(Token* _name, Expr* _expr)
+Var::Var(Token* _name, Expr* _initializer)
 {
     name = _name;
-    expr = _expr;
+    initializer = _initializer;
 }
 
 void Var::accept(Visitor<void>* visitor)

@@ -34,6 +34,14 @@ Token* Interpreter::visitGroupingExpr(Grouping* expr)
     return evaluate(expr->expression);
 }
 
+Token* Interpreter::visitAssignExpr(Assign* expr)
+{
+    Token* value = evaluate(expr->value);
+
+    environment->assign(expr->name, value);
+    return value;
+}
+
 Token* Interpreter::visitUnaryExpr(Unary* expr)
 {
     Token* right = evaluate(expr->right);
@@ -129,6 +137,11 @@ Token* Interpreter::visitBinaryExpr(Binary* expr)
     return nullptr;
 }
 
+Token* Interpreter::visitVariableExpr(Variable* expr)
+{
+    return environment->get(expr->name);
+}
+
 // Visit methods for visiting statements
 void Interpreter::visitExpressionStmt(Expression* stmt)
 {
@@ -145,8 +158,14 @@ void Interpreter::visitPrintStmt(Print* stmt)
 
 void Interpreter::visitVarStmt(Var* stmt)
 {
-    // TODO;
-    throw new RuntimeError(nullptr, "not implemented");
+    Token* value = nullptr;
+    if(stmt->initializer != nullptr)
+    {
+        value = evaluate(stmt->initializer);
+    }
+    //std::cout << environment << std::endl;
+    environment->define(stmt->name->lexeme, value);
+    return;
 }
 
 // utility methods
