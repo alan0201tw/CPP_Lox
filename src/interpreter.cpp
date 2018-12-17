@@ -143,6 +143,12 @@ void Interpreter::visitPrintStmt(Print* stmt)
     return;
 }
 
+void Interpreter::visitVarStmt(Var* stmt)
+{
+    // TODO;
+    throw new RuntimeError(nullptr, "not implemented");
+}
+
 // utility methods
 Token* Interpreter::evaluate(Expr* expr)
 {

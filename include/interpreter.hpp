@@ -4,10 +4,13 @@
 #include "expr.hpp"
 #include "stmt.hpp"
 
-// in jlox, the return type of the visitor is a Object, which can be any type in Java.
-// in cpplox, I use the Token class for this since it contains every information we need to form a object, with
-// some extra fields that can be left empty. Also, tokens for this purpose should be within these types :
-// NUMBER, STRING, TRUE, FALSE. We need these types to represent double, string, bool values.
+/**
+ * in jlox, the return type of the visitor is a Object, which can be any type in Java.
+ * in cpplox, I use the Token class for this since it contains every information we need to form a object, with
+ * some extra fields that can be left empty. ( line, lexeme )
+ * Also, tokens for this purpose should be within these types :
+ * NUMBER, STRING, TRUE, FALSE. We need these types to represent double, string, bool values.
+ */
 class Interpreter : public Expr::Visitor<Token*>, Stmt::Visitor<void>
 {
 public:
@@ -35,7 +38,7 @@ public:
     //void visitIfStmt(If* stmt);
     void visitPrintStmt(Print* stmt);
     //void visitReturnStmt(Return* stmt);
-    //void visitVarStmt(Var* stmt);
+    void visitVarStmt(Var* stmt);
     //void visitWhileStmt(While* stmt);
 
 private:

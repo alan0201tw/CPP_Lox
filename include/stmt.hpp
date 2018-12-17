@@ -34,6 +34,17 @@ public:
     virtual void accept(Visitor<void>* visitor) override;
 };
 
+class Var : public Stmt
+{
+public:
+    Token* name;
+    Expr* expr;
+
+    Var(Token* _name, Expr* _expr);
+
+    virtual void accept(Visitor<void>* visitor) override;
+};
+
 // definition of the nestes class
 template<class R> class Stmt::Visitor
 {
@@ -45,7 +56,7 @@ public:
     //virtual R visitIfStmt(If* stmt) = 0;
     virtual R visitPrintStmt(Print* stmt) = 0;
     //virtual R visitReturnStmt(Return* stmt) = 0;
-    //virtual R visitVarStmt(Var* stmt) = 0;
+    virtual R visitVarStmt(Var* stmt) = 0;
     //virtual R visitWhileStmt(While* stmt) = 0;
 };
 

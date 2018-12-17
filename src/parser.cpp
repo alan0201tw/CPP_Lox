@@ -94,7 +94,7 @@ Expr* Parser::unary()
 
 Expr* Parser::primary()
 {
-    // in cpplox, instead of the master base class of Object in other languages, we use a union object for sotring
+    // in cpplox, instead of the master base class of Object in other languages, we use a union object for storing
     // different values, in this case we store bool value false as a double value of false in cpp.
     if(match({TokenType::FALSE})) return new LiteralExpr(new Token(TokenType::FALSE, "false", nullptr, 0));
     if(match({TokenType::TRUE})) return new LiteralExpr(new Token(TokenType::TRUE, "true", nullptr, 0));
@@ -103,7 +103,13 @@ Expr* Parser::primary()
     if(match({TokenType::NUMBER, TokenType::STRING}))
     {
         // in jlox, it contains only the literal of previous token
+        // like : return new Expr.Literal(previous().literal);
         return new LiteralExpr(previous());
+    }
+
+    if(match({TokenType::IDENTIFIER}))
+    {
+        return new Variable(previous());
     }
 
     if(match({TokenType::LEFT_PAREN}))
@@ -137,6 +143,35 @@ Stmt* Parser::expressionStatement()
     Expr* expr = expression();
     consume(TokenType::SEMICOLON, "Expect ';' after expression.");
     return new Expression(expr);
+}
+
+Stmt* Parser::declarationStatement()
+{
+    try
+    {
+        if(match({TokenType::VAR})) return varDeclaration();
+
+        return statement();
+    }
+    catch(ParseError error)
+    {
+        synchronize();
+        return nullptr;
+    }
+}
+
+Stmt* Parser::varDeclaration()
+{
+    Token* name = consume(TokenType::IDENTIFIER, "Expect variable name.");
+
+    Expr* initializer = nullptr;
+    if (match({TokenType::EQUAL}))
+    {
+        initializer = expression();
+    }
+
+    consume(TokenType::SEMICOLON, "Expect ';' after variable declaration.");
+    return new Var(name, initializer);
 }
 
 // utility methods
@@ -232,7 +267,9 @@ std::vector<Stmt*> Parser::parse()
     std::vector<Stmt*> statements;
     while(!isAtEnd())
     {
-        statements.push_back(statement());
+        statements.push_back(declarationStatement());
+
+        //statements.push_back(statement());
     }
 
     return statements;

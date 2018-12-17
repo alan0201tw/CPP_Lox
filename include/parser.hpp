@@ -27,6 +27,9 @@ private:
     Stmt* statement();
     Stmt* printStatement();
     Stmt* expressionStatement();
+    Stmt* declarationStatement();
+
+    Stmt* varDeclaration();
 
     // utility methods
 

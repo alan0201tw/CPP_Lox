@@ -19,3 +19,14 @@ void Print::accept(Visitor<void>* visitor)
 {
     return visitor->visitPrintStmt(this);
 }
+
+Var::Var(Token* _name, Expr* _expr)
+{
+    name = _name;
+    expr = _expr;
+}
+
+void Var::accept(Visitor<void>* visitor)
+{
+    return visitor->visitVarStmt(this);
+}

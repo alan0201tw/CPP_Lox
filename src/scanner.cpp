@@ -80,8 +80,8 @@ void Scanner::scanToken()
             break;
         
         // when reading a new line character, ignore it and update the line count
-        case '\n':                                   
-            line++;                                    
+        case '\n':
+            line++;
             break;
 
         case '"': string(); break;
@@ -97,7 +97,9 @@ void Scanner::scanToken()
             }
             else
             {
-                Lox::error(line, "Unexpected character.");
+                std::string message = "Unexpected character : ";
+                message += c;
+                Lox::error(line, message);
             }
             break;
     }
