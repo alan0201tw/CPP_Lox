@@ -152,6 +152,12 @@ void Interpreter::visitExpressionStmt(Expression* stmt)
 void Interpreter::visitPrintStmt(Print* stmt)
 {
     Token* value = evaluate(stmt->expr);
+    // TODO : This output currently prints the info of the token,
+    // not the actual string. In the tutorial 
+    // http://www.craftinginterpreters.com/evaluating-expressions.html
+    // there is a stringify function for extracting the string.
+    // A naive way will be to print its lexeme, but we need to exclude the 0s
+    // in real value variables.
     std::cout << value->toString() << std::endl;
     return;
 }
