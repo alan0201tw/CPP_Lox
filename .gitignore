@@ -5,3 +5,6 @@ main
 *.dll
 *.o
 *.exe
+
+# ignore executables
+cpplox
