@@ -36,7 +36,7 @@ public:
     //void visitClassStmt(Class* stmt);
     void visitExpressionStmt(Expression* stmt);
     //void visitFunctionStmt(Function* stmt);
-    //void visitIfStmt(If* stmt);
+    void visitIfStmt(If* stmt);
     void visitPrintStmt(Print* stmt);
     //void visitReturnStmt(Return* stmt);
     void visitVarStmt(Var* stmt);

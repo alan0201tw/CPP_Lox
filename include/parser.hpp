@@ -29,6 +29,7 @@ private:
     Stmt* printStatement();
     Stmt* expressionStatement();
     Stmt* declarationStatement();
+    Stmt* ifStatement();
 
     Stmt* varDeclaration();
 

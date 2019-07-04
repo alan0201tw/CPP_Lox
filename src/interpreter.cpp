@@ -149,6 +149,20 @@ void Interpreter::visitExpressionStmt(Expression* stmt)
     return;
 }
 
+void Interpreter::visitIfStmt(If* stmt)
+{
+    if(isTruthy(evaluate(stmt->condition)))
+    {
+        execute(stmt->thenBranch);
+    }
+    else if(stmt->elseBranch != nullptr)
+    {
+        execute(stmt->elseBranch);
+    }
+
+    return;
+}
+
 void Interpreter::visitPrintStmt(Print* stmt)
 {
     Token* value = evaluate(stmt->expr);
@@ -192,6 +206,9 @@ bool Interpreter::isTruthy(Token* _token)
     if(_token == nullptr) return false;
     if(_token->type == TokenType::NIL) return false;
     if(_token->type == TokenType::FALSE) return false;
+    // optional 0 value
+    if(_token->type == TokenType::NUMBER && _token->literal->doubleValue == 0.0)
+        return false;
 
     return true;
 }

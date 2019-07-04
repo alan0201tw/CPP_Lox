@@ -55,6 +55,18 @@ public:
     virtual void accept(Visitor<void>* visitor) override;
 };
 
+class If : public Stmt
+{
+public:
+    Expr* condition;
+    Stmt* thenBranch;
+    Stmt* elseBranch;
+
+    If(Expr* _condition, Stmt* _thenBranch, Stmt* _elseBranch);
+
+    virtual void accept(Visitor<void>* visitor) override;
+};
+
 // definition of the nestes class
 template<class R> class Stmt::Visitor
 {
@@ -63,7 +75,7 @@ public:
     //virtual R visitClassStmt(Class* stmt) = 0;
     virtual R visitExpressionStmt(Expression* stmt) = 0;
     //virtual R visitFunctionStmt(Function* stmt) = 0;
-    //virtual R visitIfStmt(If* stmt) = 0;
+    virtual R visitIfStmt(If* stmt) = 0;
     virtual R visitPrintStmt(Print* stmt) = 0;
     //virtual R visitReturnStmt(Return* stmt) = 0;
     virtual R visitVarStmt(Var* stmt) = 0;

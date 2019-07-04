@@ -151,10 +151,27 @@ Expr* Parser::primary()
 
 Stmt* Parser::statement()
 {
+    if(match({TokenType::IF})) return ifStatement();
     if(match({TokenType::PRINT})) return printStatement();
     if(match({TokenType::LEFT_BRACE})) return new Block(block());
 
     return expressionStatement();
+}
+
+Stmt* Parser::ifStatement()
+{
+    consume(TokenType::LEFT_PAREN, "Expect '(' after 'if'.");
+    Expr* condition = expression();
+    consume(TokenType::RIGHT_PAREN, "Expect ')' after if condition.");
+
+    Stmt* thenBranch = statement();
+    Stmt* elseBranch = nullptr;
+    if(match({TokenType::ELSE}))
+    {
+        elseBranch = statement();
+    }
+
+    return new If(condition, thenBranch, elseBranch);
 }
 
 Stmt* Parser::printStatement()

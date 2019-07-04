@@ -1,0 +1,4 @@
+if(1 - 1)
+    print "it is true!";
+else
+    print "FALSE!!!";

@@ -40,3 +40,15 @@ void Block::accept(Visitor<void>* visitor)
 {
     return visitor->visitBlockStmt(this);
 }
+
+If::If(Expr* _condition, Stmt* _thenBranch, Stmt* _elseBranch)
+{
+    condition = _condition;
+    thenBranch = _thenBranch;
+    elseBranch = _elseBranch;
+}
+
+void If::accept(Visitor<void>* visitor)
+{
+    return visitor->visitIfStmt(this);
+}
