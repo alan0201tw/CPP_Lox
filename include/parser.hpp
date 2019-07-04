@@ -33,6 +33,7 @@ private:
     Stmt* varDeclaration();
 
     // utility methods
+    std::vector<Stmt*> block();
 
     // return true if the current token is any of the given types
     bool match(std::vector<TokenType> _types);

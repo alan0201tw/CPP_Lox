@@ -174,6 +174,12 @@ void Interpreter::visitVarStmt(Var* stmt)
     return;
 }
 
+void Interpreter::visitBlockStmt(Block* stmt)
+{
+    executeBlock(stmt->statements, new Environment(environment));
+    return;
+}
+
 // utility methods
 Token* Interpreter::evaluate(Expr* expr)
 {
@@ -217,6 +223,26 @@ bool Interpreter::isEqual(Token* a, Token* b)
 void Interpreter::execute(Stmt* _stmt)
 {
     _stmt->accept(this);
+}
+
+void Interpreter::executeBlock(std::vector<Stmt*> _statements, Environment* _environment)
+{
+    Environment* previous = this->environment;
+    try
+    {
+        this->environment = _environment;
+
+        for(Stmt* stmt : _statements)
+        {
+            execute(stmt);
+        }
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    
+    this->environment = previous;
 }
 
 // runtime error detection and checking

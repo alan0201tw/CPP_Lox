@@ -26,11 +26,11 @@ int main(int argc, char const *argv[])
     std::cout << printer.print(expression) << std::endl;
     */
 
-    if(argc == 1)
+    if (argc == 1)
     {
         Lox::runPrompt();
     }
-    else if(argc == 2)
+    else if (argc == 2)
     {
         /*
         argv[0] = the executable(cpplox)

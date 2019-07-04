@@ -6,7 +6,11 @@ print -(5*2+3)-5;
 
 print 6;
 print "heeel" + "www";
-
+var baa = 1;
+{
 var b = 1002 + a;
-
-print b;
+baa = 10012;
+print "baa =";print baa;
+print -0.021312+0.123123;
+}
+print baa;

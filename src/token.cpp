@@ -15,7 +15,7 @@ Literal::Literal(std::string _stringValue) : Literal()
     stringValue = _stringValue;
 }
 
-Token::Token(TokenType _type, std::string _lexeme, Literal* _literal, int _line)
+Token::Token(TokenType _type, std::string _lexeme, Literal *_literal, int _line)
 {
     type = _type;
     lexeme = _lexeme;
@@ -26,20 +26,21 @@ Token::Token(TokenType _type, std::string _lexeme, Literal* _literal, int _line)
 std::string Token::toString()
 {
     std::stringstream s;
-    s << "Type : " << (short)type << ", Lexeme : " << lexeme << ", Literal : " ;
+    // uncomment this line for debug info
+    //s << "Type : " << (short)type << ", Lexeme : " << lexeme << ", Literal : " ;
     // switch on type tag
-    if(literal == nullptr)
+    if (literal == nullptr)
     {
         s << "null";
     }
-    else if(type == TokenType::NUMBER)
+    else if (type == TokenType::NUMBER)
     {
         s << literal->doubleValue;
     }
-    else if(type == TokenType::STRING)
+    else if (type == TokenType::STRING)
     {
         s << literal->stringValue;
     }
-    
+
     return s.str();
 }

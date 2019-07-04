@@ -11,7 +11,6 @@ Parser::Parser(std::vector<Token*> _tokens)
 
 Expr* Parser::expression()
 {
-    //return equality();
     return assignment();
 }
 
@@ -153,6 +152,7 @@ Expr* Parser::primary()
 Stmt* Parser::statement()
 {
     if(match({TokenType::PRINT})) return printStatement();
+    if(match({TokenType::LEFT_BRACE})) return new Block(block());
 
     return expressionStatement();
 }
@@ -198,6 +198,19 @@ Stmt* Parser::varDeclaration()
 
     consume(TokenType::SEMICOLON, "Expect ';' after variable declaration.");
     return new Var(name, initializer);
+}
+
+std::vector<Stmt*> Parser::block()
+{
+    std::vector<Stmt*> statements;
+
+    while(check(TokenType::RIGHT_BRACE) == false && !isAtEnd())
+    {
+        statements.push_back(declarationStatement());
+    }
+
+    consume(TokenType::RIGHT_BRACE, "Expect '}' after block.");
+    return statements;
 }
 
 // utility methods

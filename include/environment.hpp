@@ -13,8 +13,13 @@ public:
     Token* get(Token* name);
     void assign(Token* name, Token* value);
 
+    Environment();
+    Environment(Environment* _enclosing);
+
 private:
     std::map<std::string, Token*> values;
+    // a pointer to the environment that contains this environment
+    Environment* enclosing;
 };
 
 #endif

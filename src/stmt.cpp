@@ -30,3 +30,13 @@ void Var::accept(Visitor<void>* visitor)
 {
     return visitor->visitVarStmt(this);
 }
+
+Block::Block(std::vector<Stmt*> _statements)
+{
+    statements = _statements;
+}
+
+void Block::accept(Visitor<void>* visitor)
+{
+    return visitor->visitBlockStmt(this);
+}

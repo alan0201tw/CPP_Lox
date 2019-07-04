@@ -32,7 +32,7 @@ public:
     Token* visitVariableExpr(Variable* expr);
 
     // Visit Stmt methods
-    //void visitBlockStmt(Block* stmt);
+    void visitBlockStmt(Block* stmt);
     //void visitClassStmt(Class* stmt);
     void visitExpressionStmt(Expression* stmt);
     //void visitFunctionStmt(Function* stmt);
@@ -49,6 +49,7 @@ private:
 
     // hepler methods for statements
     void execute(Stmt* _stmt);
+    void executeBlock(std::vector<Stmt*> _statements, Environment* _environment);
 
     // runtime error detection and checking
     void checkNumberOperand(Token* _optr, Token* _operand);
