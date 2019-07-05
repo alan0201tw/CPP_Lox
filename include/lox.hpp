@@ -26,7 +26,7 @@ private:
 
     static Interpreter* interpreter;
 
-    static void run(std::string source);
+    static void run(std::string source, bool isREPL = false);
     // report
     static void report(int line, std::string where, std::string message);
 };

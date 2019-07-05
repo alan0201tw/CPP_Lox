@@ -67,6 +67,17 @@ public:
     virtual void accept(Visitor<void>* visitor) override;
 };
 
+class While : public Stmt
+{
+public:
+    Expr* condition;
+    Stmt* body;
+
+    While(Expr* _condition, Stmt* _body);
+
+    virtual void accept(Visitor<void>* visitor) override;    
+};
+
 // definition of the nestes class
 template<class R> class Stmt::Visitor
 {
@@ -79,7 +90,7 @@ public:
     virtual R visitPrintStmt(Print* stmt) = 0;
     //virtual R visitReturnStmt(Return* stmt) = 0;
     virtual R visitVarStmt(Var* stmt) = 0;
-    //virtual R visitWhileStmt(While* stmt) = 0;
+    virtual R visitWhileStmt(While* stmt) = 0;
 };
 
 #endif

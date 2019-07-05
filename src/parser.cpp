@@ -18,7 +18,8 @@ Expr* Parser::assignment()
 {
     // the l-value, this should be of type Variable(a sub-class of Expr)
     // if not, it's propably syntax error.
-    Expr* expr = equality();
+    //Expr* expr = equality();
+    Expr* expr = logic_or();
 
     if(match({TokenType::EQUAL}))
     {
@@ -34,6 +35,34 @@ Expr* Parser::assignment()
         }
         // if the l-value is not a Variable, throw error
         error(equals, "Invalid assignment target.");
+    }
+
+    return expr;
+}
+
+Expr* Parser::logic_or()
+{
+    Expr* expr = logic_and();
+
+    while(match({TokenType::OR}))
+    {
+        Token* optr = previous();
+        Expr* right = logic_and();
+        expr = new Logical(expr, optr, right);
+    }
+
+    return expr;
+}
+
+Expr* Parser::logic_and()
+{
+    Expr* expr = equality();
+
+    while(match({TokenType::AND}))
+    {
+        Token* optr = previous();
+        Expr* right = equality();
+        expr = new Logical(expr, optr, right);
     }
 
     return expr;
@@ -153,6 +182,7 @@ Stmt* Parser::statement()
 {
     if(match({TokenType::IF})) return ifStatement();
     if(match({TokenType::PRINT})) return printStatement();
+    if(match({TokenType::WHILE})) return whileStatement();
     if(match({TokenType::LEFT_BRACE})) return new Block(block());
 
     return expressionStatement();
@@ -201,6 +231,16 @@ Stmt* Parser::declarationStatement()
         synchronize();
         return nullptr;
     }
+}
+
+Stmt* Parser::whileStatement()
+{
+    consume(TokenType::LEFT_PAREN, "Expect '(' after 'while'.");   
+    Expr* condition = expression();                      
+    consume(TokenType::RIGHT_PAREN, "Expect ')' after condition.");
+    Stmt* body = statement();
+
+    return new While(condition, body);
 }
 
 Stmt* Parser::varDeclaration()

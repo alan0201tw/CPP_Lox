@@ -52,3 +52,14 @@ void If::accept(Visitor<void>* visitor)
 {
     return visitor->visitIfStmt(this);
 }
+
+While::While(Expr* _condition, Stmt* _body)
+{
+    condition = _condition;
+    body = _body;
+}
+
+void While::accept(Visitor<void>* visitor)
+{
+    return visitor->visitWhileStmt(this);
+}

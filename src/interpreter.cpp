@@ -22,6 +22,43 @@ void Interpreter::interpret(std::vector<Stmt*> statements)
     }
 }
 
+void Interpreter::interpret_REPL(std::vector<Stmt*> statements)
+{
+    try
+    {
+        // TODO : 
+        // Add support to the REPL to let users type in both statements and expressions.
+        // If they enter a statement, execute it.
+        // If they enter an expression, evaluate it and display the result value.
+        // (statement might contains expression)
+        // statement :
+        //   print 1+1;
+        //   var a = "hello world!";
+        // 
+        // expression :
+        //   1 + 1*3
+        //   "hi" + "okkkk"
+
+        for(size_t i = 0; i < statements.size(); i++)
+        {
+            Expression* stmt = dynamic_cast<Expression*>(statements[i]);
+            if(stmt != nullptr)
+            {
+                Token* value = evaluate(stmt->expr);
+                std::cout << value->toString() << std::endl;
+            }
+            else
+            {
+               execute(statements[i]);
+            }
+        }
+    }
+    catch(RuntimeError* error)
+    {
+        Lox::runtimeError(error);
+    }
+}
+
 // Visit methods for visiting nodes in AST
 
 Token* Interpreter::visitLiteralExpr(LiteralExpr* expr)
@@ -142,7 +179,33 @@ Token* Interpreter::visitVariableExpr(Variable* expr)
     return environment->get(expr->name);
 }
 
+// this will actually implement short circuiting
+// which is a c/cpp feature that causes a chain or logic or/and 
+// operators to end as soon as the result can be evaluated
+//
+// for example :
+// if (true || something()) ...
+// this will cause the something() function never be executed(evaluated)
+// since the entire logic chain result can be known as soon as true appears
+
+Token* Interpreter::visitLogicalExpr(Logical* expr)
+{
+    Token* left = evaluate(expr->left);
+    // check the left value to see if short-circuiting is available
+    if(expr->optr->type == TokenType::OR)
+    {
+        if(isTruthy(left) == true) return left;
+    }
+    else
+    {
+        if(isTruthy(left) == false) return left;
+    }
+    // if not, we evaluate the right expression
+    return evaluate(expr->right);
+}
+
 // Visit methods for visiting statements
+
 void Interpreter::visitExpressionStmt(Expression* stmt)
 {
     evaluate(stmt->expr);
@@ -194,9 +257,22 @@ void Interpreter::visitBlockStmt(Block* stmt)
     return;
 }
 
+void Interpreter::visitWhileStmt(While* stmt)
+{
+    while(isTruthy(evaluate(stmt->condition)))
+    {
+        execute(stmt->body);
+    }
+    
+    return;
+}
+
 // utility methods
+
 Token* Interpreter::evaluate(Expr* expr)
 {
+    // this will call the corresponding visit<XXX>Expr method
+    // which will eventually execute underlying code
     return expr->accept(this);
 }
 

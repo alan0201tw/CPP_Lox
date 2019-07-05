@@ -23,6 +23,8 @@ private:
     Expr* unary();
     Expr* primary();
     Expr* assignment();
+    Expr* logic_or();
+    Expr* logic_and();
 
     // added rule for statements
     Stmt* statement();
@@ -30,7 +32,8 @@ private:
     Stmt* expressionStatement();
     Stmt* declarationStatement();
     Stmt* ifStatement();
-
+    Stmt* whileStatement();
+    
     Stmt* varDeclaration();
 
     // utility methods

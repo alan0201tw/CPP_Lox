@@ -53,12 +53,13 @@ void Lox::runPrompt()
     while(true)
     {
         std::getline(std::cin, input);
-        run(input);
+        // here we need to specify that we are running under REPL
+        run(input, true);
         hadError = false;
     }
 }
 
-void Lox::run(std::string source)
+void Lox::run(std::string source, bool isREPL)
 {
     // std::cout << "running source = " << source << std::endl;
 
@@ -71,16 +72,15 @@ void Lox::run(std::string source)
 
     // Stop if there was a syntax error.
     if(hadError) return;
-    /*
-    AstPrinter* printer = new AstPrinter();
-    std::cout << printer->print(expression) << std::endl;
-
-    for(size_t i=0; i < tokens.size(); i++)
+    
+    if(isREPL == false)
     {
-        std::cout << "Token " << i << " : " << tokens[i]->toString() << std::endl;
+        interpreter->interpret(statements);
     }
-    */
-    interpreter->interpret(statements);
+    else
+    {
+        interpreter->interpret_REPL(statements);
+    }
 }
 
 void Lox::error(int line, std::string message)

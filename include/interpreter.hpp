@@ -16,7 +16,10 @@ class Interpreter : public Expr::Visitor<Token*>, Stmt::Visitor<void>
 {
 public:
     void interpret(std::vector<Stmt*> statements);
+    // used only in REPL, for printing values of expressions
+    void interpret_REPL(std::vector<Stmt*> statements);
 
+private:
     // Visit Expr methods
     Token* visitAssignExpr(Assign* expr);
     Token* visitBinaryExpr(Binary* expr);
@@ -24,7 +27,7 @@ public:
     Token* visitGetExpr(Get* expr) { throw std::logic_error("Function not yet implemented."); };
     Token* visitGroupingExpr(Grouping* expr);
     Token* visitLiteralExpr(LiteralExpr* expr);
-    Token* visitLogicalExpr(Logical* expr) { throw std::logic_error("Function not yet implemented."); };
+    Token* visitLogicalExpr(Logical* expr);
     Token* visitSetExpr(Set* expr) { throw std::logic_error("Function not yet implemented."); };
     Token* visitSuperExpr(Super* expr) { throw std::logic_error("Function not yet implemented."); };
     Token* visitThisExpr(This* expr) { throw std::logic_error("Function not yet implemented."); };
@@ -40,7 +43,7 @@ public:
     void visitPrintStmt(Print* stmt);
     //void visitReturnStmt(Return* stmt);
     void visitVarStmt(Var* stmt);
-    //void visitWhileStmt(While* stmt);
+    void visitWhileStmt(While* stmt);
 
 private:
     Token* evaluate(Expr* expr);
