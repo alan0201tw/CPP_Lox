@@ -143,6 +143,13 @@ Token* Interpreter::visitBinaryExpr(Binary* expr)
             return doubleToken(left->literal->doubleValue + right->literal->doubleValue);
         else if(left->type == TokenType::STRING && right->type == TokenType::STRING)
             return stringToken(left->literal->stringValue + right->literal->stringValue);
+        // TODO :
+        // add string + numeric_value operator
+        else if(left->type == TokenType::STRING && right->type == TokenType::NUMBER)
+            return stringToken(left->literal->stringValue + std::to_string(right->literal->doubleValue));
+        else if(left->type == TokenType::NUMBER && right->type == TokenType::STRING)
+            return stringToken(std::to_string(left->literal->doubleValue) + right->literal->stringValue);
+        //
         // if both cases fail, throw runtime error
         throw new RuntimeError(expr->optr, "Operands must be two numbers or two strings.");
 
