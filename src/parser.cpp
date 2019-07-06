@@ -180,12 +180,85 @@ Expr* Parser::primary()
 
 Stmt* Parser::statement()
 {
+    if(match({TokenType::FOR})) return forStatement();
     if(match({TokenType::IF})) return ifStatement();
     if(match({TokenType::PRINT})) return printStatement();
     if(match({TokenType::WHILE})) return whileStatement();
     if(match({TokenType::LEFT_BRACE})) return new Block(block());
 
     return expressionStatement();
+}
+
+Stmt* Parser::forStatement()
+{
+    consume(TokenType::LEFT_PAREN, "Expext '(' after 'for'.");
+    // obtaining the initializer
+    Stmt* initializer;
+    if(match({TokenType::SEMICOLON}))
+    {
+        initializer = nullptr;
+    }
+    else if(match({TokenType::VAR}))
+    {
+        initializer = varDeclaration();
+    }
+    else
+    {
+        // if the initializer is not empty and not var declaration.
+        // then by default it is an expression.
+        initializer = expressionStatement();
+    }
+
+    // obtaining the condition
+    Expr* condition = nullptr;
+    if(!check(TokenType::SEMICOLON))
+    {
+        condition = expression();
+    }
+    consume(TokenType::SEMICOLON, "Expect ';' after for loop condition.");
+
+    // the increment expression
+    Expr* increment = nullptr;
+    if(!check(TokenType::RIGHT_PAREN))
+    {
+        increment = expression();
+    }
+    consume(TokenType::RIGHT_PAREN, "Expect ')' after for clauses.");
+
+    // finally, get the content of the for loop
+    Stmt* body = statement();
+
+    // Desugaring
+    if(increment != nullptr)
+    {
+        // for(...;...; <increment> ) { <body> }
+        // 
+        // can be translated to 
+        //
+        // while(...) { <body> <increment> }
+        //
+        body = new Block({
+            body,
+            new Expression(increment)
+        });
+    }
+
+    // if there is no stopping condition, replace it with a inf-loop
+    if(condition == nullptr)
+    {
+        condition = new LiteralExpr(new Token(TokenType::TRUE, "true", nullptr, 0));
+    }
+    body = new While(condition, body);
+
+    if(initializer != nullptr)
+    {
+        body = new Block({
+            initializer,
+            body
+        });
+    }
+    
+    return body;
 }
 
 Stmt* Parser::ifStatement()

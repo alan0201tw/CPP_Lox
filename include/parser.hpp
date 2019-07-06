@@ -28,11 +28,12 @@ private:
 
     // added rule for statements
     Stmt* statement();
+    Stmt* forStatement();
+    Stmt* ifStatement();
     Stmt* printStatement();
+    Stmt* whileStatement();
     Stmt* expressionStatement();
     Stmt* declarationStatement();
-    Stmt* ifStatement();
-    Stmt* whileStatement();
     
     Stmt* varDeclaration();
 
