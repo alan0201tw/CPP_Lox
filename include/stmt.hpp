@@ -1,5 +1,5 @@
-#ifndef LOX_STATEMENT
-#define LOX_STATEMENT
+#ifndef LOX_STMT
+#define LOX_STMT
 
 #include "expr.hpp"
 

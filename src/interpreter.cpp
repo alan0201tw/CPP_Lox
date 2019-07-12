@@ -2,6 +2,12 @@
 #include "loxException.hpp"
 #include "lox.hpp"
 
+Interpreter::Interpreter()
+{
+    // adding a native function called "clock"
+    globals->define("clock", callableToken(new LOXNF_Clock()));
+}
+
 void Interpreter::interpret(std::vector<Stmt*> statements)
 {
     try
@@ -179,6 +185,39 @@ Token* Interpreter::visitBinaryExpr(Binary* expr)
 
     // Unreachable.
     return nullptr;
+}
+
+Token* Interpreter::visitCallExpr(Call* expr)
+{
+    // here the callee should be a Token with type IDENTIFIER,
+    // to identify a function
+    Token* callee = evaluate(expr->callee);
+
+    std::vector<Token*> evaluatedArguments;
+    for(Expr* argument : expr->arguments)
+    {
+        evaluatedArguments.push_back(evaluate(argument));
+    }
+
+    // if the callee is not actually "callable"
+    if(callee->type != TokenType::CALLABLE)
+    {
+        throw new RuntimeError(expr->closingParen, "Can only call functions and classes.");
+    }
+
+    LoxCallable* function = callee->literal->callableValue;
+
+    // check if the arguments' count matches the callalbe's arity
+    if(evaluatedArguments.size() != function->arity())
+    {
+        std::ostringstream stringStream;
+        stringStream << "Expected " << function->arity() 
+            << " arguments but got " << evaluatedArguments.size() << ".";
+
+        throw new RuntimeError(expr->closingParen, stringStream.str());
+    } 
+
+    return function->call(this, evaluatedArguments);
 }
 
 Token* Interpreter::visitVariableExpr(Variable* expr)
@@ -377,4 +416,9 @@ Token* Interpreter::stringToken(std::string _value)
 {
     // the lexeme will be "_value"
     return new Token(TokenType::STRING, "\"" + _value + "\"", new Literal(_value), 0);
+}
+
+Token* Interpreter::callableToken(LoxCallable* _callable)
+{
+    return new Token(TokenType::CALLABLE, "Lox callable", new Literal(_callable), 0);
 }

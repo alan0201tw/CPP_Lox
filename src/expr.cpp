@@ -33,10 +33,10 @@ Token* Binary::accept(Visitor<Token*>* visitor)
     return visitor->visitBinaryExpr(this);
 }
 
-Call::Call(Expr* _callee, Token* _paren, std::vector<Expr>* _arguments)
+Call::Call(Expr* _callee, Token* _closingParen, std::vector<Expr*> _arguments)
 {
     callee = _callee;
-    paren = _paren;
+    closingParen = _closingParen;
     arguments = _arguments;
 }
 

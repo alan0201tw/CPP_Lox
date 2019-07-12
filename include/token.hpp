@@ -6,6 +6,8 @@
 // std::memset
 #include <cstring>
 
+#include "loxCallable.hpp"
+
 enum class TokenType : char
 {
     // Single-character tokens.
@@ -20,6 +22,8 @@ enum class TokenType : char
 
     // Literals.
     IDENTIFIER, STRING, NUMBER,
+    // added literals
+    CALLABLE,
 
     // Keywords.
     AND, CLASS, ELSE, FALSE, FUN, FOR, IF, NIL, OR,
@@ -36,10 +40,13 @@ union Literal
     // in other language, you might want to add integer value support.
     std::string stringValue;
     double doubleValue;
+    // use Literals to store LoxCallables
+    LoxCallable* callableValue;
 
-    Literal();
-    Literal(double _doubleValue);
-    Literal(std::string _stringValue);
+    explicit Literal();
+    explicit Literal(double _doubleValue);
+    explicit Literal(std::string _stringValue);
+    explicit Literal(LoxCallable* _callableValue);
 
     ~Literal() {}
 };
@@ -53,7 +60,7 @@ public:
     int line;
 
 public:
-    Token(TokenType _type, std::string _lexeme, Literal* _literal, int _line);
+    explicit Token(TokenType _type, std::string _lexeme, Literal* _literal, int _line);
     ~Token() {}
 
     std::string toString();
