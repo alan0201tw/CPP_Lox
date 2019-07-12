@@ -26,7 +26,7 @@ void Interpreter::interpret_REPL(std::vector<Stmt*> statements)
 {
     try
     {
-        // TODO : 
+        // DONE : 
         // Add support to the REPL to let users type in both statements and expressions.
         // If they enter a statement, execute it.
         // If they enter an expression, evaluate it and display the result value.
@@ -121,7 +121,7 @@ Token* Interpreter::visitBinaryExpr(Binary* expr)
         return doubleToken(left->literal->doubleValue - right->literal->doubleValue);
     case TokenType::SLASH :
         checkNumberOperands(expr->optr, left, right);
-        // TODO : handle divide by 0 error!
+        // DONE : handle divide by 0 error!
         // currenlty it'll just return inf as a double value since we use double to represent all numbers in lox.
 
         // in c++, divide by 0 on both int and float(double) is undefined behavior.
@@ -143,7 +143,7 @@ Token* Interpreter::visitBinaryExpr(Binary* expr)
             return doubleToken(left->literal->doubleValue + right->literal->doubleValue);
         else if(left->type == TokenType::STRING && right->type == TokenType::STRING)
             return stringToken(left->literal->stringValue + right->literal->stringValue);
-        // TODO :
+        // DONE :
         // add string + numeric_value operator
         else if(left->type == TokenType::STRING && right->type == TokenType::NUMBER)
             return stringToken(left->literal->stringValue + std::to_string(right->literal->doubleValue));
@@ -236,7 +236,7 @@ void Interpreter::visitIfStmt(If* stmt)
 void Interpreter::visitPrintStmt(Print* stmt)
 {
     Token* value = evaluate(stmt->expr);
-    // TODO : This output currently prints the info of the token,
+    // DONE : This output currently prints the info of the token,
     // not the actual string. In the tutorial 
     // http://www.craftinginterpreters.com/evaluating-expressions.html
     // there is a stringify function for extracting the string.

@@ -391,6 +391,9 @@ Token* Parser::consume(TokenType _type, std::string _message)
 {
     if(check(_type)) return advance();
 
+    // TODO :
+    // when an consume cannot be satisfied, it can be caused by REPL.
+    // in this case, we should allow user to continue the input.
     throw error(peek(), _message);
 }
 
