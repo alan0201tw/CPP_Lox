@@ -15,6 +15,11 @@ Literal::Literal(std::string _stringValue) : Literal()
     stringValue = _stringValue;
 }
 
+Literal::Literal(LoxCallable* _callableValue) : Literal()
+{
+    callableValue = _callableValue;
+}
+
 Token::Token(TokenType _type, std::string _lexeme, Literal *_literal, int _line)
 {
     type = _type;
@@ -40,6 +45,10 @@ std::string Token::toString()
     else if (type == TokenType::STRING)
     {
         s << literal->stringValue;
+    }
+    else if(type == TokenType::CALLABLE)
+    {
+        s << "Lox callable";
     }
 
     return s.str();

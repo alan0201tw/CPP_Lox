@@ -3,7 +3,6 @@
 #include "parser.hpp"
 #include "lox.hpp"
 
-
 Parser::Parser(std::vector<Token*> _tokens)
 {
     tokens = _tokens;
@@ -143,7 +142,55 @@ Expr* Parser::unary()
         return new Unary(optr, right);
     }
 
-    return primary();
+    // replace this line for function calls
+    //return primary();
+
+    return call();
+}
+
+Expr* Parser::call()
+{
+    Expr* expr = primary();
+    
+    while(true)
+    {
+        if(match({TokenType::LEFT_PAREN}))
+        {
+            expr = finishCall(expr);
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return expr;
+}
+
+Expr* Parser::finishCall(Expr* callee)
+{
+    std::vector<Expr*> arguments;
+    if(!check(TokenType::RIGHT_PAREN))
+    {
+        do
+        {
+            // check the number of arguments passing to the function
+            // note that we do not throw the returned exception from error()
+            // this is because we do not want the interpreter to enter panic state
+            // the intepreter is stll valid, it's just the user need t be informed
+            // that the argument count should not be this long
+            if(arguments.size() >= 8)
+            {
+                error(peek(), "Cannot have more than 8 arguments.");
+            }
+
+            arguments.push_back(expression());
+        } while (match({TokenType::COMMA}));
+    }
+
+    Token* closingParen = consume(TokenType::RIGHT_PAREN, "Expect ')' after arguments.");
+
+    return new Call(callee, closingParen, arguments);
 }
 
 Expr* Parser::primary()

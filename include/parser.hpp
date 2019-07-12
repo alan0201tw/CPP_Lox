@@ -21,10 +21,14 @@ private:
     Expr* addition();
     Expr* multiplication();
     Expr* unary();
+    Expr* call();
     Expr* primary();
     Expr* assignment();
     Expr* logic_or();
     Expr* logic_and();
+
+    // helper functions for parsing
+    Expr* finishCall(Expr* _callee);
 
     // added rule for statements
     Stmt* statement();

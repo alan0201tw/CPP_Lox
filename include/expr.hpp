@@ -5,6 +5,8 @@
 
 #include <vector>
 
+class Token;
+
 // interface for Expr classes
 class Expr
 {
@@ -52,11 +54,11 @@ class Call : public Expr
 {
 public:
     Expr* callee;
-    Token* paren;
-    std::vector<Expr>* arguments;
+    Token* closingParen;
+    std::vector<Expr*> arguments;
 
 public:
-    Call(Expr* _callee, Token* _paren, std::vector<Expr>* _arguments);
+    Call(Expr* _callee, Token* _closingParen, std::vector<Expr*> _arguments);
 
     virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
