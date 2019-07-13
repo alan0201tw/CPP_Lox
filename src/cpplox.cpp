@@ -28,13 +28,6 @@ int main(int argc, char const *argv[])
 
     if (argc == 1)
     {
-        // TODO : 
-        // http://www.craftinginterpreters.com/statements-and-state.html
-        // challenge : adding the block feature to cpplox
-        // will actually require the REPL to automatically detect
-        // braces. other wise the REPL will log error as soon as
-        // user inputs " if(...) ", and will not prompt for further commands.
-
         Lox::runPrompt();
     }
     else if (argc == 2)
