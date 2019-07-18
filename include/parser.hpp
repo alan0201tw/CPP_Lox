@@ -5,7 +5,6 @@
 
 #include "token.hpp"
 #include "expr.hpp"
-#include "loxException.hpp"
 #include "stmt.hpp"
 
 class Parser

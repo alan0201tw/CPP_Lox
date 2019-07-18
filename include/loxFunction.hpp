@@ -2,6 +2,7 @@
 #define LOX_FUNCTION
 
 #include "interpreter.hpp"
+#include "loxCallable.hpp"
 
 class LoxFunction : public LoxCallable
 {

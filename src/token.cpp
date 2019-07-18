@@ -1,4 +1,9 @@
 #include "token.hpp"
+#include "loxFunction.hpp"
+
+// std::memset
+#include <cstring>
+#include <sstream>
 
 Literal::Literal()
 {

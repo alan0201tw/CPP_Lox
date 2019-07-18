@@ -2,7 +2,6 @@
 #define LOX_EXCEPTION
 
 #include <exception>
-#include <stdexcept>
 
 #include "token.hpp"
 

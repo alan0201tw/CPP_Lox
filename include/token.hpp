@@ -2,12 +2,8 @@
 #define LOX_TOKEN
 
 #include <iostream>
-#include <sstream>
-// std::memset
-#include <cstring>
 
 #include "loxCallable.hpp"
-#include "loxFunction.hpp"
 
 enum class TokenType : char
 {

@@ -1,7 +1,6 @@
 #ifndef LOX_ENVIRONMENT
 #define LOX_ENVIRONMENT
 
-#include <iostream>
 #include <map>
 
 #include "token.hpp"

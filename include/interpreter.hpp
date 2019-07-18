@@ -3,7 +3,6 @@
 
 #include "expr.hpp"
 #include "stmt.hpp"
-#include "nativeFunction.hpp"
 
 // forward-defining
 class LoxCallable;

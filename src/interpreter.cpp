@@ -2,6 +2,10 @@
 #include "loxException.hpp"
 #include "lox.hpp"
 #include "environment.hpp"
+#include "nativeFunction.hpp"
+#include "loxFunction.hpp"
+
+#include <sstream>
 
 Interpreter::Interpreter() : globals(new Environment())
 {

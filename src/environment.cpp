@@ -1,6 +1,7 @@
 #include "environment.hpp"
-
 #include "loxException.hpp"
+
+#include <iostream>
 
 Environment::Environment()
 {

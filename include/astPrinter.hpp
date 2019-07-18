@@ -2,8 +2,6 @@
 #define LOX_ASTPRINTER
 
 #include "expr.hpp"
-#include "token.hpp"
-
 #include <vector>
 
 class AstPrinter : public Expr::Visitor<std::string>
