@@ -1,8 +1,7 @@
 #ifndef LOX_EXPR
 #define LOX_EXPR
 
-#include "token.hpp"
-
+#include <iostream>
 #include <vector>
 
 class Token;

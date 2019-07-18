@@ -63,3 +63,15 @@ void While::accept(Visitor<void>* visitor)
 {
     return visitor->visitWhileStmt(this);
 }
+
+Function::Function(Token* _name, std::vector<Token*> _params, std::vector<Stmt*> _body)
+{
+    name = _name;
+    params = _params;
+    body = _body;
+}
+
+void Function::accept(Visitor<void>* visitor)
+{
+    return visitor->visitFunctionStmt(this);
+}

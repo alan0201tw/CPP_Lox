@@ -43,6 +43,7 @@ private:
 
     // utility methods
     std::vector<Stmt*> block();
+    Function* function(std::string kind);
 
     // return true if the current token is any of the given types
     bool match(std::vector<TokenType> _types);

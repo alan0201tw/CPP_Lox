@@ -7,6 +7,7 @@
 #include <cstring>
 
 #include "loxCallable.hpp"
+#include "loxFunction.hpp"
 
 enum class TokenType : char
 {
@@ -32,7 +33,6 @@ enum class TokenType : char
     // avoid naming EOF since it's a defined macro in many libs
     EOF_TOKEN
 };
-
 
 union Literal
 {

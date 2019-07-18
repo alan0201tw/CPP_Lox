@@ -3,12 +3,11 @@
 
 #include "expr.hpp"
 #include "stmt.hpp"
-#include "environment.hpp"
-#include "loxCallable.hpp"
 #include "nativeFunction.hpp"
 
 // forward-defining
 class LoxCallable;
+class Environment;
 
 /**
  * in jlox, the return type of the visitor is a Object, which can be any type in Java.
@@ -25,6 +24,8 @@ public:
     void interpret(std::vector<Stmt*> statements);
     // used only in REPL, for printing values of expressions
     void interpret_REPL(std::vector<Stmt*> statements);
+
+    friend class LoxFunction;
 
 private:
     // Visit Expr methods
@@ -45,7 +46,7 @@ private:
     void visitBlockStmt(Block* stmt);
     //void visitClassStmt(Class* stmt);
     void visitExpressionStmt(Expression* stmt);
-    //void visitFunctionStmt(Function* stmt);
+    void visitFunctionStmt(Function* stmt);
     void visitIfStmt(If* stmt);
     void visitPrintStmt(Print* stmt);
     //void visitReturnStmt(Return* stmt);
@@ -60,7 +61,7 @@ private:
     // hepler methods for statements
     void execute(Stmt* _stmt);
     void executeBlock(std::vector<Stmt*> _statements, Environment* _environment);
-
+    
     // runtime error detection and checking
     void checkNumberOperand(Token* _optr, Token* _operand);
     void checkNumberOperands(Token* _optr, Token* _left, Token* _right);
@@ -71,8 +72,8 @@ private:
     static Token* stringToken(std::string _value); // return a Token representing given string value
     static Token* callableToken(LoxCallable* _callable); // return a Token representing a LoxCallable
 
-    Environment* const globals = new Environment();
-    Environment* environment = globals;
+    Environment* const globals;
+    Environment* environment;
 };
 
 #endif

@@ -1,11 +1,14 @@
 #include "interpreter.hpp"
 #include "loxException.hpp"
 #include "lox.hpp"
+#include "environment.hpp"
 
-Interpreter::Interpreter()
+Interpreter::Interpreter() : globals(new Environment())
 {
     // adding a native function called "clock"
     globals->define("clock", callableToken(new LOXNF_Clock()));
+    
+    environment = globals;
 }
 
 void Interpreter::interpret(std::vector<Stmt*> statements)
@@ -255,6 +258,14 @@ Token* Interpreter::visitLogicalExpr(Logical* expr)
 void Interpreter::visitExpressionStmt(Expression* stmt)
 {
     evaluate(stmt->expr);
+    return;
+}
+
+void Interpreter::visitFunctionStmt(Function* stmt)
+{
+    LoxFunction* function = new LoxFunction(stmt);
+    environment->define(stmt->name->lexeme, callableToken(function));
+
     return;
 }
 

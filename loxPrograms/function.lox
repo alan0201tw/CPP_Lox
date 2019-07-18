@@ -1,0 +1,10 @@
+fun sayHi(first, last, n) {
+  print "Hi, " + first + ", " + last + "!";
+  print "------------------";
+  if(n > 0)
+  {
+    sayHi(last, first, n-1);
+  }
+}
+
+sayHi("Dear", "Reader", 10);

@@ -2,6 +2,7 @@
 #define LOX_ASTPRINTER
 
 #include "expr.hpp"
+#include "token.hpp"
 
 #include <vector>
 

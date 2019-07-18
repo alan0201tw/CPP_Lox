@@ -344,6 +344,8 @@ Stmt* Parser::declarationStatement()
 {
     try
     {
+        // added for enabling function declaration
+        if(match({TokenType::FUN})) return function("function");
         if(match({TokenType::VAR})) return varDeclaration();
 
         return statement();
@@ -379,6 +381,33 @@ Stmt* Parser::varDeclaration()
     return new Var(name, initializer);
 }
 
+Function* Parser::function(std::string kind)
+{
+    Token* name = consume(TokenType::IDENTIFIER, "Expect " + kind + " name.");
+    consume(TokenType::LEFT_PAREN, "Expect '(' after " + kind + " name.");
+    std::vector<Token*> parameters;
+
+    if(!check(TokenType::RIGHT_PAREN))
+    {
+        do
+        {
+            if(parameters.size() >= 8)
+            {
+                error(peek(), "Cannot have more than 8 parameters.");
+            }
+
+            parameters.push_back(consume(TokenType::IDENTIFIER, "Expect parameter name."));
+        } while (match({TokenType::COMMA}));
+    }
+    consume(TokenType::RIGHT_PAREN, "Expect ')' after parameters");
+
+    consume(TokenType::LEFT_BRACE, "Expect '{' before " + kind + " body.");
+    std::vector<Stmt*> body = block();
+    return new Function(name, parameters, body);
+}
+
+// This function will NOT consume the left brace and will stop 
+// after consuming the right brace.
 std::vector<Stmt*> Parser::block()
 {
     std::vector<Stmt*> statements;

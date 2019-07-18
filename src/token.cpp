@@ -48,7 +48,16 @@ std::string Token::toString()
     }
     else if(type == TokenType::CALLABLE)
     {
-        s << "Lox callable";
+        LoxFunction* tmp = dynamic_cast<LoxFunction*>(literal->callableValue);
+        
+        if(tmp == nullptr)
+        {
+            s << "None LoxFunction callable";
+        }
+        else
+        {
+            s << "<fn " << tmp->declaration->name->lexeme << ">";
+        }
     }
 
     return s.str();
