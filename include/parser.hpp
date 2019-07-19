@@ -34,6 +34,7 @@ private:
     Stmt* forStatement();
     Stmt* ifStatement();
     Stmt* printStatement();
+    Stmt* returnStatement();
     Stmt* whileStatement();
     Stmt* expressionStatement();
     Stmt* declarationStatement();

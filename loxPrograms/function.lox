@@ -7,4 +7,4 @@ fun sayHi(first, last, n) {
   }
 }
 
-sayHi("Dear", "Reader", 10);
+sayHi("Dear", "Reader", 5);

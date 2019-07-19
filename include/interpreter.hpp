@@ -24,8 +24,6 @@ public:
     // used only in REPL, for printing values of expressions
     void interpret_REPL(std::vector<Stmt*> statements);
 
-    friend class LoxFunction;
-
 private:
     // Visit Expr methods
     Token* visitAssignExpr(Assign* expr);
@@ -48,7 +46,7 @@ private:
     void visitFunctionStmt(Function* stmt);
     void visitIfStmt(If* stmt);
     void visitPrintStmt(Print* stmt);
-    //void visitReturnStmt(Return* stmt);
+    void visitReturnStmt(Return* stmt);
     void visitVarStmt(Var* stmt);
     void visitWhileStmt(While* stmt);
 
@@ -73,6 +71,8 @@ private:
 
     Environment* const globals;
     Environment* environment;
+    
+    friend class LoxFunction;
 };
 
 #endif

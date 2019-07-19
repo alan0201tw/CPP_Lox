@@ -75,3 +75,14 @@ void Function::accept(Visitor<void>* visitor)
 {
     return visitor->visitFunctionStmt(this);
 }
+
+Return::Return(Token* _keyword, Expr* _value)
+{
+    keyword = _keyword;
+    value = _value;
+}
+
+void Return::accept(Visitor<void>* visitor)
+{
+    return visitor->visitReturnStmt(this);
+}

@@ -230,6 +230,7 @@ Stmt* Parser::statement()
     if(match({TokenType::FOR})) return forStatement();
     if(match({TokenType::IF})) return ifStatement();
     if(match({TokenType::PRINT})) return printStatement();
+    if(match({TokenType::RETURN})) return returnStatement();
     if(match({TokenType::WHILE})) return whileStatement();
     if(match({TokenType::LEFT_BRACE})) return new Block(block());
 
@@ -331,6 +332,20 @@ Stmt* Parser::printStatement()
     Expr* value = expression();
     consume(TokenType::SEMICOLON, "Expect ';' after value.");
     return new Print(value);
+}
+
+Stmt* Parser::returnStatement()
+{
+    Token* keyword = previous();
+    Expr* value = nullptr;
+
+    if(!check(TokenType::SEMICOLON))
+    {
+        value = expression();
+    }
+
+    consume(TokenType::SEMICOLON, "Expect ';' after return value.");
+    return new Return(keyword, value);
 }
 
 Stmt* Parser::expressionStatement()

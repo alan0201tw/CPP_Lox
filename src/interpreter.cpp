@@ -4,6 +4,7 @@
 #include "environment.hpp"
 #include "nativeFunction.hpp"
 #include "loxFunction.hpp"
+#include "return.hpp"
 
 #include <sstream>
 
@@ -300,6 +301,17 @@ void Interpreter::visitPrintStmt(Print* stmt)
     return;
 }
 
+void Interpreter::visitReturnStmt(Return* stmt)
+{
+    Token* value = nullptr;
+    if(stmt->value != nullptr)
+    {
+        value = evaluate(stmt->value);
+    }
+
+    throw new ReturnExcept(value);
+}
+
 void Interpreter::visitVarStmt(Var* stmt)
 {
     Token* value = nullptr;
@@ -391,9 +403,16 @@ void Interpreter::executeBlock(std::vector<Stmt*> _statements, Environment* _env
             execute(stmt);
         }
     }
-    catch(const std::exception& e)
+    catch(...)
     {
-        std::cerr << e.what() << '\n';
+        // referencing https://gitlab.com/aggsol/lox-simple/blob/master/src/Interpreter.cpp#L337
+        // it somehow gets the wrong fibonnaci lox program correct.
+        // It might be due to incorrect environment recovery, so
+        // the recursion variable 'n' in the fibonnaci program has incorrect
+        // value.
+
+        this->environment = previous;
+        throw;
     }
     
     this->environment = previous;

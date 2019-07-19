@@ -31,7 +31,7 @@ Token* Environment::get(Token* name)
     {
         return enclosing->get(name);
     }
-
+    
     throw new RuntimeError(name, "Undefined variable \'" + name->lexeme + "\'.");
 };
 
