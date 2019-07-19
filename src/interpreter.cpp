@@ -403,6 +403,10 @@ void Interpreter::executeBlock(std::vector<Stmt*> _statements, Environment* _env
             execute(stmt);
         }
     }
+    // in jlox, it is try-final here. So I guess we could use this syntax
+    // to mimic that.
+    // here, we might catch exceptions for ReturnExcept. 
+    // Which will cause control flow changes.
     catch(...)
     {
         // referencing https://gitlab.com/aggsol/lox-simple/blob/master/src/Interpreter.cpp#L337
@@ -415,6 +419,8 @@ void Interpreter::executeBlock(std::vector<Stmt*> _statements, Environment* _env
         throw;
     }
     
+    // putting this statement here might cause it to be ignored by
+    // exceptions so the control flow jumps back to outer catches.
     this->environment = previous;
 }
 
