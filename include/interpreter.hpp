@@ -49,6 +49,8 @@ private:
     void visitReturnStmt(Return* stmt);
     void visitVarStmt(Var* stmt);
     void visitWhileStmt(While* stmt);
+    //
+    void visitBreakStmt(Break* stmt);
 
 private:
     Token* evaluate(Expr* expr);

@@ -12,4 +12,11 @@ public:
     ReturnExcept(Token* _token) : runtime_error(""), token(_token) {}
 };
 
+class BreakExcept : public std::runtime_error
+{
+public:
+    BreakExcept() : runtime_error("") {}
+};
+
+
 #endif

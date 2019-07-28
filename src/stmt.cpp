@@ -86,3 +86,10 @@ void Return::accept(Visitor<void>* visitor)
 {
     return visitor->visitReturnStmt(this);
 }
+
+Break::Break() {}
+
+void Break::accept(Visitor<void>* visitor)
+{
+    return visitor->visitBreakStmt(this);
+}

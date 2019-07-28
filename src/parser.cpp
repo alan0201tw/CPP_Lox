@@ -233,6 +233,8 @@ Stmt* Parser::statement()
     if(match({TokenType::RETURN})) return returnStatement();
     if(match({TokenType::WHILE})) return whileStatement();
     if(match({TokenType::LEFT_BRACE})) return new Block(block());
+    // added for break statement
+    if(match({TokenType::BREAK})) return breakStatement();
 
     return expressionStatement();
 }
@@ -380,6 +382,12 @@ Stmt* Parser::whileStatement()
     Stmt* body = statement();
 
     return new While(condition, body);
+}
+
+Stmt* Parser::breakStatement()
+{
+    consume(TokenType::SEMICOLON, "Expected ';' after 'break'.");
+    return new Break();
 }
 
 Stmt* Parser::varDeclaration()
