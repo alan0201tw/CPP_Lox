@@ -268,7 +268,7 @@ void Interpreter::visitExpressionStmt(Expression* stmt)
 
 void Interpreter::visitFunctionStmt(Function* stmt)
 {
-    LoxFunction* function = new LoxFunction(stmt);
+    LoxFunction* function = new LoxFunction(stmt, this->environment);
     environment->define(stmt->name->lexeme, callableToken(function));
 
     return;

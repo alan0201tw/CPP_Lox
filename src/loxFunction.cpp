@@ -2,14 +2,16 @@
 #include "environment.hpp"
 #include "return.hpp"
 
-LoxFunction::LoxFunction(Function* _declaration)
+LoxFunction::LoxFunction(Function* _declaration, Environment* _closure)
 {
     declaration = _declaration;
+    closure = _closure;
 }
 
 Token* LoxFunction::call(Interpreter* _interpreter, std::vector<Token*> _arguments)
 {
-    Environment* environment = new Environment(_interpreter->globals);
+    // Environment* environment = new Environment(_interpreter->globals);
+    Environment* environment = new Environment(this->closure);
     for(uint i = 0; i < declaration->params.size(); i++)
     {
         environment->define(declaration->params[i]->lexeme, _arguments[i]);
