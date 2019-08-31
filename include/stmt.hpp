@@ -98,7 +98,15 @@ public:
 
     Return(Token* _keyword, Expr* _value);
 
-    virtual void accept(Visitor<void>* visitor) override;    
+    virtual void accept(Visitor<void>* visitor) override;
+};
+
+class Break : public Stmt
+{
+public:
+    Break();
+
+    virtual void accept(Visitor<void>* visitor) override;
 };
 
 // definition of the nestes class
@@ -114,6 +122,8 @@ public:
     virtual R visitReturnStmt(Return* stmt) = 0;
     virtual R visitVarStmt(Var* stmt) = 0;
     virtual R visitWhileStmt(While* stmt) = 0;
+    //
+    virtual R visitBreakStmt(Break* stmt) = 0;
 };
 
 #endif

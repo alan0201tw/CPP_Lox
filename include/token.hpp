@@ -19,12 +19,14 @@ enum class TokenType : char
 
     // Literals.
     IDENTIFIER, STRING, NUMBER,
-    // added literals
+    // added Literals.
     CALLABLE,
 
     // Keywords.
     AND, CLASS, ELSE, FALSE, FUN, FOR, IF, NIL, OR,
     PRINT, RETURN, SUPER, THIS, TRUE, VAR, WHILE,
+    // added Keywords.
+    BREAK,
 
     // avoid naming EOF since it's a defined macro in many libs
     EOF_TOKEN

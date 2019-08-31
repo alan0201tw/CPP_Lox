@@ -334,10 +334,23 @@ void Interpreter::visitWhileStmt(While* stmt)
 {
     while(isTruthy(evaluate(stmt->condition)))
     {
-        execute(stmt->body);
+        try
+        {
+            execute(stmt->body);
+        }
+        catch(BreakExcept* e)
+        {
+            break;
+            std::cerr << e->what() << '\n';
+        }
     }
     
     return;
+}
+
+void Interpreter::visitBreakStmt(Break* stmt)
+{
+    throw new BreakExcept();
 }
 
 // utility methods
@@ -404,8 +417,7 @@ void Interpreter::executeBlock(std::vector<Stmt*> _statements, Environment* _env
         }
     }
     // in jlox, it is try-final here. So I guess we could use this syntax
-    // to mimic that.
-    // here, we might catch exceptions for ReturnExcept. 
+    // to mimic that. Here, we might catch exceptions for ReturnExcept. 
     // Which will cause control flow changes.
     catch(...)
     {

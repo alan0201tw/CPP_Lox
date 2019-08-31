@@ -38,6 +38,8 @@ private:
     Stmt* whileStatement();
     Stmt* expressionStatement();
     Stmt* declarationStatement();
+    //
+    Stmt* breakStatement();
     
     Stmt* varDeclaration();
 
