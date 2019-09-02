@@ -3,6 +3,13 @@ fun fibonacci(n) {
   return fibonacci(n - 2) + fibonacci(n - 1);
 }
 
-for (var i = 0; i < 20; i = i + 1) {
+var before = clock();
+print "before = " + before;
+
+for (var i = 0; i < 28; i = i + 1) {
   print fibonacci(i);
 }
+
+var after = clock();
+print "after = " + after;
+print "diff = " + (after - before);

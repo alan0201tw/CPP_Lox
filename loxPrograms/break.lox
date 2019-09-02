@@ -19,7 +19,7 @@ while (a < 10000)
 for(var i = 0; i < 10 ; i = i + 1)
 {
     print "i = " + i;
-    if(i <= 7)
+    if(i >= 7)
     {
     print "breaking...";
     break;
