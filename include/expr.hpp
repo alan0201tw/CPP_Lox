@@ -35,6 +35,7 @@ public:
 
     virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
+    virtual void accept(Visitor<void>* visitor) override;
 };
 
 class Binary : public Expr
@@ -49,6 +50,7 @@ public:
 
     virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
+    virtual void accept(Visitor<void>* visitor) override;
 };
 
 class Call : public Expr
@@ -63,6 +65,7 @@ public:
 
     virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
+    virtual void accept(Visitor<void>* visitor) override;
 };
 
 class Get : public Expr
@@ -76,6 +79,7 @@ public:
 
     virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
+    virtual void accept(Visitor<void>* visitor) override;
 };
 
 class Grouping : public Expr
@@ -88,6 +92,7 @@ public:
 
     virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
+    virtual void accept(Visitor<void>* visitor) override;
 };
 
 class LiteralExpr : public Expr
@@ -106,6 +111,7 @@ public:
 
     virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
+    virtual void accept(Visitor<void>* visitor) override;
 };
 
 class Logical : public Expr
@@ -120,6 +126,7 @@ public:
 
     virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
+    virtual void accept(Visitor<void>* visitor) override;
 };
 
 class Set : public Expr
@@ -134,6 +141,7 @@ public:
 
     virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
+    virtual void accept(Visitor<void>* visitor) override;
 };
 
 class Super : public Expr
@@ -147,6 +155,7 @@ public:
 
     virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
+    virtual void accept(Visitor<void>* visitor) override;
 };
 
 class This : public Expr
@@ -159,6 +168,7 @@ public:
 
     virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
+    virtual void accept(Visitor<void>* visitor) override;
 };
 
 class Unary : public Expr
@@ -172,6 +182,7 @@ public:
 
     virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
+    virtual void accept(Visitor<void>* visitor) override;
 };
 
 class Variable : public Expr
@@ -184,6 +195,7 @@ public:
 
     virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;
+    virtual void accept(Visitor<void>* visitor) override;
 };
 
 // interface for visiting Exprs

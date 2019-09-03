@@ -6,7 +6,7 @@
 #include "interpreter.hpp"
 
 #include <vector>
-#include <stack>
+#include <list>
 #include <map>
 
 class Resolver : public Expr::Visitor<void>, Stmt::Visitor<void>
@@ -16,7 +16,8 @@ private:
 
     Interpreter* const interpreter;
     // Keys, as in Environment, are variable names.
-    std::stack<stringToBoolMap*> scopes;
+    // here we use doubly-linked-list instead of stacks in the text book, since it uses the "get" method in Java stack.
+    std::list<stringToBoolMap*> scopes;
 
 public:
     Resolver(Interpreter* _interpreter);
@@ -24,10 +25,17 @@ public:
     virtual void visitBlockStmt(Block* stmt) override;
     virtual void visitVarStmt(Var* stmt) override;
 
+    virtual void visitVariableExpr(Variable* expr) override;
+
 private:
     void resolve(std::vector<Stmt*> _statements);
     void resolve(Stmt* _statement);
     void resolve(Expr* _expression);
+
+    void resolveLocal(Expr* _expr, Token* _name);
+
+    void declare(Token* _name);
+    void define(Token* _name);
 
     void beginScope();
     void endScope();
