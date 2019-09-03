@@ -17,6 +17,8 @@ public:
     virtual std::string accept(Visitor<std::string>* visitor) = 0; // this is for AstPrinter
     virtual Token* accept(Visitor<Token*>* visitor) = 0; // for interpreter
 
+    virtual void accept(Visitor<void>* visitor) = 0;
+
     // I use this workaround since the tutorial uses virtual generic methods,
     // which isn't possible in C++. After doing some research, I come up with this
     // not-so-good approach. Please don't judge me for this. Q_Q
