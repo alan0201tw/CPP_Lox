@@ -35,6 +35,13 @@ Token* Environment::get(Token* name)
     throw new RuntimeError(name, "Undefined variable \'" + name->lexeme + "\'.");
 };
 
+Token* Environment::getAt(int distance, std::string name)
+{
+    // jlox :
+    // return ancestor(distance).values.get(name);
+    return ancestor(distance)->values[name];
+}
+
 void Environment::assign(Token* name, Token* value)
 {
     if(values.find(name->lexeme) != values.end())
@@ -51,4 +58,20 @@ void Environment::assign(Token* name, Token* value)
     }
     
     throw new RuntimeError(name, "Undefined variable \'" + name->lexeme + "\'.");
+}
+
+void Environment::assignAt(int distance, Token* name, Token* value)
+{
+    // ancestor(distance).values.put(name.lexeme, value);
+    ancestor(distance)->values[name->lexeme] = value;
+}
+
+Environment* Environment::ancestor(int distance)
+{
+    Environment* environment = this;
+    for(int i = 0; i < distance; i++)
+    {
+        environment = environment->enclosing;
+    }
+    return environment;
 }

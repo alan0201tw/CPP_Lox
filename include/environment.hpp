@@ -10,7 +10,11 @@ class Environment
 public:
     void define(std::string name, Token* value);
     Token* get(Token* name);
+    Token* getAt(int distance, std::string name);
     void assign(Token* name, Token* value);
+    void assignAt(int distance, Token* name, Token* value);
+
+    Environment* ancestor(int distance);
 
     Environment();
     Environment(Environment* _enclosing);

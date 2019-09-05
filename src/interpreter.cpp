@@ -89,7 +89,19 @@ Token* Interpreter::visitAssignExpr(Assign* expr)
 {
     Token* value = evaluate(expr->value);
 
-    environment->assign(expr->name, value);
+    //environment->assign(expr->name, value);
+
+    // added for resolver
+    if(locals.find(expr) != locals.end())
+    {
+        int distance = locals[expr];
+        environment->assignAt(distance, expr->name, value);
+    }
+    else
+    {
+        globals->assign(expr->name, value);
+    }
+
     return value;
 }
 
@@ -230,7 +242,20 @@ Token* Interpreter::visitCallExpr(Call* expr)
 
 Token* Interpreter::visitVariableExpr(Variable* expr)
 {
-    return environment->get(expr->name);
+    return lookUpVariable(expr->name, expr);
+    //return environment->get(expr->name);
+}
+
+Token* Interpreter::lookUpVariable(Token* _name, Expr* _expr)
+{
+    // if _expr exists in "locals"
+    if(locals.find(_expr) != locals.end())
+    {
+        int distance = locals[_expr];
+        return environment->getAt(distance, _name->lexeme);
+    }
+    // not found in any locals, access global
+    return globals->get(_name);
 }
 
 // this will actually implement short circuiting
@@ -448,6 +473,13 @@ void Interpreter::checkNumberOperands(Token* _optr, Token* _left, Token* _right)
 {
     if(_left->type == TokenType::NUMBER && _right->type == TokenType::NUMBER) return;
     throw new RuntimeError(_optr, "Operand must be a numbers.");
+}
+
+// for resolver
+
+void Interpreter::resolve(Expr* _expr, int depth)
+{
+    locals[_expr] = depth;
 }
 
 // my utility methods

@@ -8,6 +8,7 @@
 #include "scanner.hpp"
 #include "parser.hpp"
 #include "astPrinter.hpp"
+#include "resolver.hpp"
 
 // initializing static fields
 bool Lox::hadError = false;
@@ -79,7 +80,13 @@ void Lox::run(std::string source, bool isREPL)
 
     // Stop if there was a syntax error.
     if(hadError) return;
-    
+
+    // ask resolver to work
+    Resolver resolver(interpreter);
+    resolver.resolve(statements);
+
+    if (hadError) return;
+
     if(isREPL == false)
     {
         interpreter->interpret(statements);

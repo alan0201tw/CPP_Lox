@@ -4,6 +4,8 @@
 #include "expr.hpp"
 #include "stmt.hpp"
 
+#include <map>
+
 // forward-defining
 class LoxCallable;
 class Environment;
@@ -24,33 +26,38 @@ public:
     // used only in REPL, for printing values of expressions
     void interpret_REPL(std::vector<Stmt*> statements);
 
+    // for resolvers
+    void resolve(Expr* _expr, int depth);
+
 private:
     // Visit Expr methods
-    Token* visitAssignExpr(Assign* expr);
-    Token* visitBinaryExpr(Binary* expr);
-    Token* visitCallExpr(Call* expr);
-    Token* visitGetExpr(Get* expr) { throw std::logic_error("Function not yet implemented."); };
-    Token* visitGroupingExpr(Grouping* expr);
-    Token* visitLiteralExpr(LiteralExpr* expr);
-    Token* visitLogicalExpr(Logical* expr);
-    Token* visitSetExpr(Set* expr) { throw std::logic_error("Function not yet implemented."); };
-    Token* visitSuperExpr(Super* expr) { throw std::logic_error("Function not yet implemented."); };
-    Token* visitThisExpr(This* expr) { throw std::logic_error("Function not yet implemented."); };
-    Token* visitUnaryExpr(Unary* expr);
-    Token* visitVariableExpr(Variable* expr);
+    virtual Token* visitAssignExpr(Assign* expr) override;
+    virtual Token* visitBinaryExpr(Binary* expr) override;
+    virtual Token* visitCallExpr(Call* expr) override;
+    virtual Token* visitGetExpr(Get* expr) { throw std::logic_error("Function not yet implemented."); };
+    virtual Token* visitGroupingExpr(Grouping* expr) override;
+    virtual Token* visitLiteralExpr(LiteralExpr* expr) override;
+    virtual Token* visitLogicalExpr(Logical* expr) override;
+    virtual Token* visitSetExpr(Set* expr) { throw std::logic_error("Function not yet implemented."); };
+    virtual Token* visitSuperExpr(Super* expr) { throw std::logic_error("Function not yet implemented."); };
+    virtual Token* visitThisExpr(This* expr) { throw std::logic_error("Function not yet implemented."); };
+    virtual Token* visitUnaryExpr(Unary* expr) override;
+    virtual Token* visitVariableExpr(Variable* expr) override;
+
+    Token* lookUpVariable(Token* _name, Expr* _expr);
 
     // Visit Stmt methods
-    void visitBlockStmt(Block* stmt);
+    virtual void visitBlockStmt(Block* stmt) override;
     //void visitClassStmt(Class* stmt);
-    void visitExpressionStmt(Expression* stmt);
-    void visitFunctionStmt(Function* stmt);
-    void visitIfStmt(If* stmt);
-    void visitPrintStmt(Print* stmt);
-    void visitReturnStmt(Return* stmt);
-    void visitVarStmt(Var* stmt);
-    void visitWhileStmt(While* stmt);
+    virtual void visitExpressionStmt(Expression* stmt) override;
+    virtual void visitFunctionStmt(Function* stmt) override;
+    virtual void visitIfStmt(If* stmt) override;
+    virtual void visitPrintStmt(Print* stmt) override;
+    virtual void visitReturnStmt(Return* stmt) override;
+    virtual void visitVarStmt(Var* stmt) override;
+    virtual void visitWhileStmt(While* stmt) override;
     //
-    void visitBreakStmt(Break* stmt);
+    virtual void visitBreakStmt(Break* stmt) override;
 
 private:
     Token* evaluate(Expr* expr);
@@ -73,6 +80,8 @@ private:
 
     Environment* const globals;
     Environment* environment;
+
+    std::map<Expr*, int> locals;
     
     friend class LoxFunction;
 };

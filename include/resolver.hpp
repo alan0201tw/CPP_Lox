@@ -6,8 +6,12 @@
 #include "interpreter.hpp"
 
 #include <vector>
-#include <list>
 #include <map>
+
+enum class FunctionType : short
+{
+    NONE, FUNCTION
+};
 
 class Resolver : public Expr::Visitor<void>, Stmt::Visitor<void>
 {
@@ -16,23 +20,44 @@ private:
 
     Interpreter* const interpreter;
     // Keys, as in Environment, are variable names.
-    // here we use doubly-linked-list instead of stacks in the text book, since it uses the "get" method in Java stack.
-    std::list<stringToBoolMap*> scopes;
+    std::vector<stringToBoolMap*> scopes;
+    FunctionType currentFunction = FunctionType::NONE; 
 
 public:
     Resolver(Interpreter* _interpreter);
 
     virtual void visitBlockStmt(Block* stmt) override;
     virtual void visitVarStmt(Var* stmt) override;
+    virtual void visitFunctionStmt(Function* stmt) override;
+    virtual void visitExpressionStmt(Expression* stmt) override;
+    virtual void visitIfStmt(If* stmt) override;
+    virtual void visitPrintStmt(Print* stmt) override;
+    virtual void visitReturnStmt(Return* stmt) override;
+    virtual void visitWhileStmt(While* stmt) override;
+    virtual void visitBreakStmt(Break* stmt) override;
 
     virtual void visitVariableExpr(Variable* expr) override;
+    virtual void visitAssignExpr(Assign* expr) override;
+    virtual void visitBinaryExpr(Binary* expr) override;
+    virtual void visitCallExpr(Call* expr) override;
+    virtual void visitGroupingExpr(Grouping* expr) override;
+    virtual void visitLiteralExpr(LiteralExpr* expr) override;
+    virtual void visitLogicalExpr(Logical* expr) override;
+    virtual void visitUnaryExpr(Unary* expr) override;
+
+    virtual void visitGetExpr(Get* expr) override { throw std::logic_error("Function not yet implemented."); }
+    virtual void visitSetExpr(Set* expr) override { throw std::logic_error("Function not yet implemented."); }
+    virtual void visitSuperExpr(Super* expr) override { throw std::logic_error("Function not yet implemented."); }
+    virtual void visitThisExpr(This* expr) override { throw std::logic_error("Function not yet implemented."); }
+
+    void resolve(std::vector<Stmt*> _statements);
 
 private:
-    void resolve(std::vector<Stmt*> _statements);
     void resolve(Stmt* _statement);
     void resolve(Expr* _expression);
 
     void resolveLocal(Expr* _expr, Token* _name);
+    void resolveFunction(Function* _function, FunctionType type);
 
     void declare(Token* _name);
     void define(Token* _name);
