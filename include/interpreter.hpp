@@ -9,6 +9,7 @@
 // forward-defining
 class LoxCallable;
 class Environment;
+class LoxClass;
 
 /**
  * in jlox, the return type of the visitor is a Object, which can be any type in Java.
@@ -34,7 +35,7 @@ private:
     virtual Token* visitAssignExpr(Assign* expr) override;
     virtual Token* visitBinaryExpr(Binary* expr) override;
     virtual Token* visitCallExpr(Call* expr) override;
-    virtual Token* visitGetExpr(Get* expr) { throw std::logic_error("Function not yet implemented."); };
+    virtual Token* visitGetExpr(Get* expr) override;// { throw std::logic_error("Function not yet implemented."); };
     virtual Token* visitGroupingExpr(Grouping* expr) override;
     virtual Token* visitLiteralExpr(LiteralExpr* expr) override;
     virtual Token* visitLogicalExpr(Logical* expr) override;
@@ -48,7 +49,7 @@ private:
 
     // Visit Stmt methods
     virtual void visitBlockStmt(Block* stmt) override;
-    //void visitClassStmt(Class* stmt);
+    virtual void visitClassStmt(Class* stmt) override;
     virtual void visitExpressionStmt(Expression* stmt) override;
     virtual void visitFunctionStmt(Function* stmt) override;
     virtual void visitIfStmt(If* stmt) override;
@@ -77,6 +78,7 @@ private:
     static Token* doubleToken(double _value); // return a Token representing given double value
     static Token* stringToken(std::string _value); // return a Token representing given string value
     static Token* callableToken(LoxCallable* _callable); // return a Token representing a LoxCallable
+    static Token* classToken(LoxClass* _class);
 
     Environment* const globals;
     Environment* environment;

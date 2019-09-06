@@ -35,6 +35,7 @@ public:
     virtual void visitReturnStmt(Return* stmt) override;
     virtual void visitWhileStmt(While* stmt) override;
     virtual void visitBreakStmt(Break* stmt) override;
+    virtual void visitClassStmt(Class* stmt) override;
 
     virtual void visitVariableExpr(Variable* expr) override;
     virtual void visitAssignExpr(Assign* expr) override;
@@ -45,7 +46,7 @@ public:
     virtual void visitLogicalExpr(Logical* expr) override;
     virtual void visitUnaryExpr(Unary* expr) override;
 
-    virtual void visitGetExpr(Get* expr) override { throw std::logic_error("Function not yet implemented."); }
+    virtual void visitGetExpr(Get* expr) override;// { throw std::logic_error("Function not yet implemented."); }
     virtual void visitSetExpr(Set* expr) override { throw std::logic_error("Function not yet implemented."); }
     virtual void visitSuperExpr(Super* expr) override { throw std::logic_error("Function not yet implemented."); }
     virtual void visitThisExpr(This* expr) override { throw std::logic_error("Function not yet implemented."); }

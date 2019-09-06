@@ -109,12 +109,24 @@ public:
     virtual void accept(Visitor<void>* visitor) override;
 };
 
+class Class : public Stmt
+{
+public:
+    Token* name;
+    Variable* superclass;
+    std::vector<Function*> methods;
+
+    Class(Token* _name, Variable* _superclass, std::vector<Function*> _methods);
+
+    virtual void accept(Visitor<void>* visitor) override;
+};
+
 // definition of the nestes class
 template<class R> class Stmt::Visitor
 {
 public:
     virtual R visitBlockStmt(Block* stmt) = 0;
-    //virtual R visitClassStmt(Class* stmt) = 0;
+    virtual R visitClassStmt(Class* stmt) = 0;
     virtual R visitExpressionStmt(Expression* stmt) = 0;
     virtual R visitFunctionStmt(Function* stmt) = 0;
     virtual R visitIfStmt(If* stmt) = 0;

@@ -93,3 +93,15 @@ void Break::accept(Visitor<void>* visitor)
 {
     return visitor->visitBreakStmt(this);
 }
+
+Class::Class(Token* _name, Variable* _superclass, std::vector<Function*> _methods)
+{
+    name = _name;
+    superclass = _superclass;
+    methods = _methods;
+}
+
+void Class::accept(Visitor<void>* visitor)
+{
+    return visitor->visitClassStmt(this);
+}

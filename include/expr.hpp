@@ -68,20 +68,6 @@ public:
     virtual void accept(Visitor<void>* visitor) override;
 };
 
-class Get : public Expr
-{
-public:
-    Expr* object;
-    Token* name;
-
-public:
-    Get(Expr* _object, Token* _name);
-
-    virtual std::string accept(Visitor<std::string>* visitor) override;
-    virtual Token* accept(Visitor<Token*>* visitor) override;
-    virtual void accept(Visitor<void>* visitor) override;
-};
-
 class Grouping : public Expr
 {
 public:
@@ -192,6 +178,20 @@ public:
     
 public:
     Variable(Token* _name);
+
+    virtual std::string accept(Visitor<std::string>* visitor) override;
+    virtual Token* accept(Visitor<Token*>* visitor) override;
+    virtual void accept(Visitor<void>* visitor) override;
+};
+
+class Get : public Expr
+{
+public:
+    Expr* const object;
+    Token* const name;
+
+public:
+    Get(Expr* _object, Token* _name);
 
     virtual std::string accept(Visitor<std::string>* visitor) override;
     virtual Token* accept(Visitor<Token*>* visitor) override;

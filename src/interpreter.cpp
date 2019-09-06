@@ -5,6 +5,8 @@
 #include "nativeFunction.hpp"
 #include "loxFunction.hpp"
 #include "return.hpp"
+#include "loxClass.hpp"
+#include "loxInstance.hpp"
 
 #include <sstream>
 
@@ -209,8 +211,6 @@ Token* Interpreter::visitBinaryExpr(Binary* expr)
 
 Token* Interpreter::visitCallExpr(Call* expr)
 {
-    // here the callee should be a Token with type IDENTIFIER,
-    // to identify a function
     Token* callee = evaluate(expr->callee);
 
     std::vector<Token*> evaluatedArguments;
@@ -219,8 +219,8 @@ Token* Interpreter::visitCallExpr(Call* expr)
         evaluatedArguments.push_back(evaluate(argument));
     }
 
-    // if the callee is not actually "callable"
-    if(callee->type != TokenType::CALLABLE)
+    // if the callee is not actually "callable", which is either function or class
+    if(callee->type != TokenType::CALLABLE && callee->type != TokenType::CLASS)
     {
         throw new RuntimeError(expr->closingParen, "Can only call functions and classes.");
     }
@@ -235,9 +235,20 @@ Token* Interpreter::visitCallExpr(Call* expr)
             << " arguments but got " << evaluatedArguments.size() << ".";
 
         throw new RuntimeError(expr->closingParen, stringStream.str());
-    } 
+    }
 
     return function->call(this, evaluatedArguments);
+}
+
+Token* Interpreter::visitGetExpr(Get* expr)
+{
+    Token* object = evaluate(expr->object);
+    if(object->type == TokenType::INSTANCE)
+    {
+        return object->literal->instanceValue->get(expr->name);
+    }
+
+    throw new RuntimeError(expr->name, "Only instances have properties.");
 }
 
 Token* Interpreter::visitVariableExpr(Variable* expr)
@@ -352,6 +363,14 @@ void Interpreter::visitVarStmt(Var* stmt)
 void Interpreter::visitBlockStmt(Block* stmt)
 {
     executeBlock(stmt->statements, new Environment(environment));
+    return;
+}
+
+void Interpreter::visitClassStmt(Class* stmt)
+{
+    environment->define(stmt->name->lexeme, nullptr);
+    LoxClass* klass = new LoxClass(stmt->name->lexeme);
+    environment->assign(stmt->name, classToken(klass));
     return;
 }
 
@@ -505,4 +524,9 @@ Token* Interpreter::stringToken(std::string _value)
 Token* Interpreter::callableToken(LoxCallable* _callable)
 {
     return new Token(TokenType::CALLABLE, "Lox callable", new Literal(_callable), 0);
+}
+
+Token* Interpreter::classToken(LoxClass* _class)
+{
+    return new Token(TokenType::CLASS, "Lox class", new Literal(_class), 0);
 }

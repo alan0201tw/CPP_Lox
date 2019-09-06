@@ -65,27 +65,6 @@ void Call::accept(Visitor<void>* visitor)
     return visitor->visitCallExpr(this);
 }
 
-Get::Get(Expr* _object, Token* _name)
-{
-    object = _object;
-    name = _name;
-}
-
-std::string Get::accept(Visitor<std::string>* visitor)
-{
-    return visitor->visitGetExpr(this);
-}
-
-Token* Get::accept(Visitor<Token*>* visitor)
-{
-    return visitor->visitGetExpr(this);
-}
-
-void Get::accept(Visitor<void>* visitor)
-{
-    return visitor->visitGetExpr(this);
-}
-
 Grouping::Grouping(Expr* _expression)
 {
     expression = _expression;
@@ -250,4 +229,21 @@ Token* Variable::accept(Visitor<Token*>* visitor)
 void Variable::accept(Visitor<void>* visitor)
 {
     return visitor->visitVariableExpr(this);
+}
+
+Get::Get(Expr* _object, Token* _name) : object(_object), name(_name) {}
+
+std::string Get::accept(Visitor<std::string>* visitor)
+{
+    return visitor->visitGetExpr(this);
+}
+
+Token* Get::accept(Visitor<Token*>* visitor)
+{
+    return visitor->visitGetExpr(this);
+}
+
+void Get::accept(Visitor<void>* visitor)
+{
+    return visitor->visitGetExpr(this);
 }

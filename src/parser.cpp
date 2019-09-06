@@ -158,6 +158,12 @@ Expr* Parser::call()
         {
             expr = finishCall(expr);
         }
+        // added for calling on instances
+        else if(match({TokenType::DOT}))
+        {
+            Token* name = consume(TokenType::IDENTIFIER, "Expect property name after '.'.");
+            expr = new Get(expr, name);
+        }
         else
         {
             break;
@@ -362,6 +368,7 @@ Stmt* Parser::declarationStatement()
     try
     {
         // added for enabling function declaration
+        if(match({TokenType::CLASS})) return classDeclaration();
         if(match({TokenType::FUN})) return function("function");
         if(match({TokenType::VAR})) return varDeclaration();
 
@@ -402,6 +409,23 @@ Stmt* Parser::varDeclaration()
 
     consume(TokenType::SEMICOLON, "Expect ';' after variable declaration.");
     return new Var(name, initializer);
+}
+
+Stmt* Parser::classDeclaration()
+{
+    Token* name = consume(TokenType::IDENTIFIER, "Expect class name.");
+    consume(TokenType::LEFT_BRACE, "Expect '{' before class body.");
+    
+    std::vector<Function*> methods;
+    while(!check(TokenType::RIGHT_BRACE) && !isAtEnd())
+    {
+        methods.push_back(function("method"));
+    }
+
+    consume(TokenType::RIGHT_BRACE, "Expect '}' after class body.");
+
+    // TODO : change the nullptr field
+    return new Class(name, nullptr, methods);
 }
 
 Function* Parser::function(std::string kind)

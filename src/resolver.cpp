@@ -84,6 +84,13 @@ void Resolver::visitBreakStmt(Break* stmt)
     return;
 }
 
+void Resolver::visitClassStmt(Class* stmt)
+{
+    declare(stmt->name);
+    define(stmt->name);
+    return;
+}
+
 void Resolver::visitVariableExpr(Variable* expr)
 {
     // scope is not empty, and the value found is false
@@ -145,6 +152,12 @@ void Resolver::visitLogicalExpr(Logical* expr)
 void Resolver::visitUnaryExpr(Unary* expr)
 {
     resolve(expr->right);
+    return;
+}
+
+void Resolver::visitGetExpr(Get* expr)
+{
+    resolve(expr->object);
     return;
 }
 

@@ -5,6 +5,9 @@
 
 #include "loxCallable.hpp"
 
+class LoxClass;
+class LoxInstance;
+
 enum class TokenType : char
 {
     // Single-character tokens.
@@ -20,7 +23,7 @@ enum class TokenType : char
     // Literals.
     IDENTIFIER, STRING, NUMBER,
     // added Literals.
-    CALLABLE,
+    CALLABLE, INSTANCE,
 
     // Keywords.
     AND, CLASS, ELSE, FALSE, FUN, FOR, IF, NIL, OR,
@@ -40,11 +43,15 @@ union Literal
     double doubleValue;
     // use Literals to store LoxCallables
     LoxCallable* callableValue;
+    LoxClass* classValue;
+    LoxInstance* instanceValue;
 
     explicit Literal();
     explicit Literal(double _doubleValue);
     explicit Literal(std::string _stringValue);
     explicit Literal(LoxCallable* _callableValue);
+    explicit Literal(LoxClass* _classValue);
+    explicit Literal(LoxInstance* _instanceValue);
 
     ~Literal() {}
 };

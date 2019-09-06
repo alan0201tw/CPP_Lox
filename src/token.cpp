@@ -1,5 +1,7 @@
 #include "token.hpp"
 #include "loxFunction.hpp"
+#include "loxClass.hpp"
+#include "loxInstance.hpp"
 
 // std::memset
 #include <cstring>
@@ -23,6 +25,16 @@ Literal::Literal(std::string _stringValue) : Literal()
 Literal::Literal(LoxCallable* _callableValue) : Literal()
 {
     callableValue = _callableValue;
+}
+
+Literal::Literal(LoxClass* _classValue) : Literal()
+{
+    classValue = _classValue;
+}
+
+Literal::Literal(LoxInstance* _instanceValue) : Literal()
+{
+    instanceValue = _instanceValue;
 }
 
 Token::Token(TokenType _type, std::string _lexeme, Literal *_literal, int _line)
@@ -63,6 +75,16 @@ std::string Token::toString()
         {
             s << "<fn " << tmp->declaration->name->lexeme << ">";
         }
+    }
+    else if(type == TokenType::CLASS)
+    {
+        LoxClass* tmp = dynamic_cast<LoxClass*>(literal->classValue);
+        s << tmp->ToString();
+    }
+    else if(type == TokenType::INSTANCE)
+    {
+        LoxInstance* tmp = dynamic_cast<LoxInstance*>(literal->instanceValue);
+        s << tmp->ToString();
     }
 
     return s.str();

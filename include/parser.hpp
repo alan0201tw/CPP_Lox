@@ -42,6 +42,7 @@ private:
     Stmt* breakStatement();
     
     Stmt* varDeclaration();
+    Stmt* classDeclaration();
 
     // utility methods
     std::vector<Stmt*> block();
