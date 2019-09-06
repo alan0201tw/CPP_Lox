@@ -17,6 +17,7 @@ public:
     LoxInstance(LoxClass* _klass);
 
     Token* get(Token* name);
+    void set(Token* name, Token* value);
 
     std::string ToString();
 };

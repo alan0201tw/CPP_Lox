@@ -32,6 +32,10 @@ Expr* Parser::assignment()
             //std::cout << name << " " << value << std::endl;
             return new Assign(name, value);
         }
+        else if(Get* get = dynamic_cast<Get*>(expr))
+        {
+            return new Set(get->object, get->name, value);
+        }
         // if the l-value is not a Variable, throw error
         error(equals, "Invalid assignment target.");
     }

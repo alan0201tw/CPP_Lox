@@ -294,6 +294,20 @@ Token* Interpreter::visitLogicalExpr(Logical* expr)
     return evaluate(expr->right);
 }
 
+Token* Interpreter::visitSetExpr(Set* expr)
+{
+    Token* object = evaluate(expr->object);
+
+    if(object->type != TokenType::INSTANCE)
+    {
+        throw new RuntimeError(expr->name, "Only instances have fields.");
+    }
+
+    Token* value = evaluate(expr->value);
+    object->literal->instanceValue->set(expr->name, value);
+    return value;
+}
+
 // Visit methods for visiting statements
 
 void Interpreter::visitExpressionStmt(Expression* stmt)

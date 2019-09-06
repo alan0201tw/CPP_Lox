@@ -39,7 +39,7 @@ private:
     virtual Token* visitGroupingExpr(Grouping* expr) override;
     virtual Token* visitLiteralExpr(LiteralExpr* expr) override;
     virtual Token* visitLogicalExpr(Logical* expr) override;
-    virtual Token* visitSetExpr(Set* expr) { throw std::logic_error("Function not yet implemented."); };
+    virtual Token* visitSetExpr(Set* expr) override;// { throw std::logic_error("Function not yet implemented."); };
     virtual Token* visitSuperExpr(Super* expr) { throw std::logic_error("Function not yet implemented."); };
     virtual Token* visitThisExpr(This* expr) { throw std::logic_error("Function not yet implemented."); };
     virtual Token* visitUnaryExpr(Unary* expr) override;
