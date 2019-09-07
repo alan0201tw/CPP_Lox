@@ -4,6 +4,8 @@
 #include "interpreter.hpp"
 #include "loxCallable.hpp"
 
+class LoxInstance;
+
 class LoxFunction : public LoxCallable
 {
 public:
@@ -13,6 +15,9 @@ public:
 
     Function* declaration;
     Environment* closure;
+
+public:
+    LoxFunction* bind(LoxInstance* _instance);
 };
 
 #endif

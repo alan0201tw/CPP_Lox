@@ -11,6 +11,12 @@ Token* LoxInstance::get(Token* name)
         return fields[name->lexeme];
     }
 
+    LoxFunction* method = klass->findMethod(name->lexeme);
+    if(method != nullptr)
+    {
+        return new Token(TokenType::CALLABLE, "Lox callable", new Literal(method->bind(this)), 0);
+    }
+
     throw new RuntimeError(name, "Undefined property '" + name->lexeme + "'.");
 }
 

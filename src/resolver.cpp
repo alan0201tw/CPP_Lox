@@ -86,8 +86,25 @@ void Resolver::visitBreakStmt(Break* stmt)
 
 void Resolver::visitClassStmt(Class* stmt)
 {
+    ClassType enclosingClass = currentClass;
+    currentClass = ClassType::CLASS;
+
     declare(stmt->name);
     define(stmt->name);
+
+    // defining "this"
+    beginScope();
+    (*scopes.back())["this"] = true;
+
+    for(Function* method : stmt->methods)
+    {
+        FunctionType declaration = FunctionType::METHOD;
+        resolveFunction(method, declaration);
+    }
+
+    endScope();
+
+    currentClass = enclosingClass;
     return;
 }
 
@@ -158,6 +175,25 @@ void Resolver::visitUnaryExpr(Unary* expr)
 void Resolver::visitGetExpr(Get* expr)
 {
     resolve(expr->object);
+    return;
+}
+
+void Resolver::visitSetExpr(Set* expr)
+{
+    resolve(expr->value);
+    resolve(expr->object);
+    return;
+}
+
+void Resolver::visitThisExpr(This* expr)
+{
+    if(currentClass == ClassType::NONE)
+    {
+        Lox::error(expr->keyword, "Cannot use 'this' outside of a class.");
+        return;
+    }
+
+    resolveLocal(expr, expr->keyword);
     return;
 }
 

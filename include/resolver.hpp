@@ -10,7 +10,12 @@
 
 enum class FunctionType : short
 {
-    NONE, FUNCTION
+    NONE, FUNCTION, METHOD
+};
+
+enum class ClassType : short
+{
+    NONE, CLASS
 };
 
 class Resolver : public Expr::Visitor<void>, Stmt::Visitor<void>
@@ -21,7 +26,9 @@ private:
     Interpreter* const interpreter;
     // Keys, as in Environment, are variable names.
     std::vector<stringToBoolMap*> scopes;
+    
     FunctionType currentFunction = FunctionType::NONE; 
+    ClassType currentClass = ClassType::NONE;
 
 public:
     Resolver(Interpreter* _interpreter);
@@ -47,9 +54,9 @@ public:
     virtual void visitUnaryExpr(Unary* expr) override;
 
     virtual void visitGetExpr(Get* expr) override;// { throw std::logic_error("Function not yet implemented."); }
-    virtual void visitSetExpr(Set* expr) override { throw std::logic_error("Function not yet implemented."); }
+    virtual void visitSetExpr(Set* expr) override;// { throw std::logic_error("Function not yet implemented."); }
     virtual void visitSuperExpr(Super* expr) override { throw std::logic_error("Function not yet implemented."); }
-    virtual void visitThisExpr(This* expr) override { throw std::logic_error("Function not yet implemented."); }
+    virtual void visitThisExpr(This* expr) override;// { throw std::logic_error("Function not yet implemented."); }
 
     void resolve(std::vector<Stmt*> _statements);
 

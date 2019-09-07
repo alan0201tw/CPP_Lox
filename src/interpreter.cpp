@@ -107,6 +107,11 @@ Token* Interpreter::visitAssignExpr(Assign* expr)
     return value;
 }
 
+Token* Interpreter::visitThisExpr(This* expr)
+{
+    return lookUpVariable(expr->keyword, expr);
+}
+
 Token* Interpreter::visitUnaryExpr(Unary* expr)
 {
     Token* right = evaluate(expr->right);
@@ -383,7 +388,16 @@ void Interpreter::visitBlockStmt(Block* stmt)
 void Interpreter::visitClassStmt(Class* stmt)
 {
     environment->define(stmt->name->lexeme, nullptr);
-    LoxClass* klass = new LoxClass(stmt->name->lexeme);
+    //LoxClass* klass = new LoxClass(stmt->name->lexeme);
+    
+    std::map<std::string, LoxFunction*> methods;
+    for(Function* method : stmt->methods)
+    {
+        LoxFunction* function = new LoxFunction(method, environment);
+        methods[method->name->lexeme] = function;
+    }
+    LoxClass* klass = new LoxClass(stmt->name->lexeme, methods);
+
     environment->assign(stmt->name, classToken(klass));
     return;
 }

@@ -37,3 +37,12 @@ size_t LoxFunction::arity()
 {
     return declaration->params.size();
 }
+
+LoxFunction* LoxFunction::bind(LoxInstance* _instance)
+{
+    Environment* environment = new Environment(closure);
+    environment->define("this", 
+        new Token(TokenType::INSTANCE, "Lox Instance", new Literal(_instance), 0));
+    
+    return new LoxFunction(declaration, environment);
+}

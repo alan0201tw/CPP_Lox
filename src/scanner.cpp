@@ -93,7 +93,8 @@ void Scanner::scanToken()
             {
                 number();
             }
-            else if(isalpha(c))
+            // here we also allow underscores ('_')
+            else if(isalpha(c) || c == '_')
             {
                 identifier();
             }
@@ -197,7 +198,8 @@ void Scanner::identifier()
 {
     std::string value;
 
-    while (isalnum(peek())) advance();
+    // here we allow alphabet, numbers, and underscore('_') 
+    while (isalnum(peek()) || peek() == '_') advance();
 
     TokenType type;
     

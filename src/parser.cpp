@@ -218,6 +218,11 @@ Expr* Parser::primary()
         return new LiteralExpr(previous());
     }
 
+    if(match({TokenType::THIS}))
+    {
+        return new This(previous());
+    }
+
     if(match({TokenType::IDENTIFIER}))
     {
         return new Variable(previous());

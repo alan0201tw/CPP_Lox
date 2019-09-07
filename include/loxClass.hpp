@@ -4,6 +4,7 @@
 #include <string>
 
 #include "loxCallable.hpp"
+#include "loxFunction.hpp"
 
 /*
     In Lox, we use syntaxes like...
@@ -20,13 +21,16 @@ class LoxClass : public LoxCallable
 {
 public:
     std::string const name;
+    std::map<std::string, LoxFunction*> const methods;
     
 public:
-    LoxClass(std::string _name);
+    LoxClass(std::string _name, std::map<std::string, LoxFunction*> _methods);
     std::string ToString();
 
     virtual size_t arity() override;
     virtual Token* call(Interpreter* _interpreter, std::vector<Token*> _arguments) override;
+
+    LoxFunction* findMethod(std::string _methodName);
 };
 
 #endif
