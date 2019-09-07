@@ -67,6 +67,10 @@ void Resolver::visitReturnStmt(Return* stmt)
 
     if(stmt->value != nullptr)
     {
+        if(currentFunction == FunctionType::INITIALIZER)
+        {
+            Lox::error(stmt->keyword, "Cannot return a value from an initializer.");
+        }
         resolve(stmt->value);
     }
     return;
@@ -99,6 +103,12 @@ void Resolver::visitClassStmt(Class* stmt)
     for(Function* method : stmt->methods)
     {
         FunctionType declaration = FunctionType::METHOD;
+        // determine if this method is "init"
+        if(method->name->lexeme == "init")
+        {
+            declaration = FunctionType::INITIALIZER;
+        }
+
         resolveFunction(method, declaration);
     }
 

@@ -393,7 +393,8 @@ void Interpreter::visitClassStmt(Class* stmt)
     std::map<std::string, LoxFunction*> methods;
     for(Function* method : stmt->methods)
     {
-        LoxFunction* function = new LoxFunction(method, environment);
+        bool isInitializer = (method->name->lexeme == "init");
+        LoxFunction* function = new LoxFunction(method, environment, isInitializer);
         methods[method->name->lexeme] = function;
     }
     LoxClass* klass = new LoxClass(stmt->name->lexeme, methods);

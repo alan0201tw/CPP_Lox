@@ -10,7 +10,7 @@
 
 enum class FunctionType : short
 {
-    NONE, FUNCTION, METHOD
+    NONE, FUNCTION, INITIALIZER, METHOD
 };
 
 enum class ClassType : short

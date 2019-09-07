@@ -72,3 +72,40 @@ fun _not_method_()
 }
 
 _not_method_();
+
+////////////
+
+class Foo {
+  init() {
+    print this;
+  }
+}
+
+var foo = Foo();
+print foo.init();
+
+////////////////
+
+class Fruit
+{
+  init(name, color)
+  {
+    this.name = name;
+    this.color = color;
+  }
+
+  output_color()
+  {
+    print this.name + " is color : " + this.color;
+  }
+}
+
+var apple = Fruit("apple", "red");
+apple.output_color();
+
+var orange = Fruit("orange", "orange");
+orange.output_color();
+
+var _tmp = "Unknown";
+var unknown_fruit_ = Fruit(_tmp, _tmp);
+unknown_fruit_.output_color();
