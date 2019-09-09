@@ -21,10 +21,11 @@ class LoxClass : public LoxCallable
 {
 public:
     std::string const name;
+    LoxClass* const superclass;
     std::map<std::string, LoxFunction*> const methods;
     
 public:
-    LoxClass(std::string _name, std::map<std::string, LoxFunction*> _methods);
+    LoxClass(std::string _name, LoxClass* _superclass, std::map<std::string, LoxFunction*> _methods);
     std::string ToString();
 
     virtual size_t arity() override;

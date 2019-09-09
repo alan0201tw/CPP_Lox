@@ -423,6 +423,14 @@ Stmt* Parser::varDeclaration()
 Stmt* Parser::classDeclaration()
 {
     Token* name = consume(TokenType::IDENTIFIER, "Expect class name.");
+    // add support for detecting inheritance
+    Variable* superclass = nullptr;
+    if(match({TokenType::LESS}) == true)
+    {
+        consume(TokenType::IDENTIFIER, "Expect superclass name.");
+        superclass = new Variable(previous());
+    }
+    //
     consume(TokenType::LEFT_BRACE, "Expect '{' before class body.");
     
     std::vector<Function*> methods;
@@ -434,7 +442,7 @@ Stmt* Parser::classDeclaration()
     consume(TokenType::RIGHT_BRACE, "Expect '}' after class body.");
 
     // TODO : change the nullptr field
-    return new Class(name, nullptr, methods);
+    return new Class(name, superclass, methods);
 }
 
 Function* Parser::function(std::string kind)

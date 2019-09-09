@@ -96,6 +96,18 @@ void Resolver::visitClassStmt(Class* stmt)
     declare(stmt->name);
     define(stmt->name);
 
+    // detect inheritance chains
+    if(stmt->superclass != nullptr
+       && stmt->name->lexeme == stmt->superclass->name->lexeme)
+    {
+        Lox::error(stmt->superclass->name, "A class cannot inherit from itself.");
+    }
+
+    if(stmt->superclass != nullptr)
+    {
+        resolve(stmt->superclass);
+    }
+
     // defining "this"
     beginScope();
     (*scopes.back())["this"] = true;

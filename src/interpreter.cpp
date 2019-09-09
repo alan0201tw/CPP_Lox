@@ -387,6 +387,16 @@ void Interpreter::visitBlockStmt(Block* stmt)
 
 void Interpreter::visitClassStmt(Class* stmt)
 {
+    Token* superclass = nullptr;
+    if(stmt->superclass != nullptr)
+    {
+        superclass = evaluate(stmt->superclass);
+        if(superclass->type != TokenType::CLASS)
+        {
+            throw new RuntimeError(stmt->superclass->name, "Superclass must be a class.");
+        }
+    }
+
     environment->define(stmt->name->lexeme, nullptr);
     //LoxClass* klass = new LoxClass(stmt->name->lexeme);
     
@@ -397,7 +407,12 @@ void Interpreter::visitClassStmt(Class* stmt)
         LoxFunction* function = new LoxFunction(method, environment, isInitializer);
         methods[method->name->lexeme] = function;
     }
-    LoxClass* klass = new LoxClass(stmt->name->lexeme, methods);
+
+    // select super class base on evaluation
+    LoxClass* superclassValue = (superclass == nullptr) ? nullptr : superclass->literal->classValue;
+
+    LoxClass* klass = new LoxClass(
+        stmt->name->lexeme, superclassValue, methods);
 
     environment->assign(stmt->name, classToken(klass));
     return;

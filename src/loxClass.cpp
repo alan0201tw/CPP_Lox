@@ -3,8 +3,8 @@
 #include "loxInstance.hpp"
 #include "token.hpp"
 
-LoxClass::LoxClass(std::string _name, std::map<std::string, LoxFunction*> _methods)
-    : name(_name), methods(_methods) {}
+LoxClass::LoxClass(std::string _name, LoxClass* _superclass, std::map<std::string, LoxFunction*> _methods)
+    : name(_name), superclass(_superclass), methods(_methods) {}
 
 std::string LoxClass::ToString()
 {
@@ -39,5 +39,11 @@ LoxFunction* LoxClass::findMethod(std::string _methodName)
     {
         return methods.at(_methodName);
     }
+
+    if (superclass != nullptr)
+    {
+        return superclass->findMethod(_methodName);
+    }
+    
     return nullptr;
 }
