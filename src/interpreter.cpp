@@ -313,6 +313,24 @@ Token* Interpreter::visitSetExpr(Set* expr)
     return value;
 }
 
+Token* Interpreter::visitSuperExpr(Super* expr)
+{
+    int distance = locals[expr];
+    LoxClass* superclass = environment->getAt(distance, "super")->literal->classValue;
+
+    // "this" is always one level nearer than "super"'s environment.
+    LoxInstance* object = environment->getAt(distance - 1, "this")->literal->instanceValue;
+
+    LoxFunction* method = superclass->findMethod(expr->method->lexeme);
+
+    if(method == nullptr)
+    {
+        throw new RuntimeError(expr->method, "Undefined property '" + expr->method->lexeme + "'.");
+    }
+
+    return callableToken(method->bind(object));
+}
+
 // Visit methods for visiting statements
 
 void Interpreter::visitExpressionStmt(Expression* stmt)
@@ -400,6 +418,12 @@ void Interpreter::visitClassStmt(Class* stmt)
     environment->define(stmt->name->lexeme, nullptr);
     //LoxClass* klass = new LoxClass(stmt->name->lexeme);
     
+    if(stmt->superclass != nullptr)
+    {
+        environment = new Environment(environment);
+        environment->define("super", superclass);
+    }
+
     std::map<std::string, LoxFunction*> methods;
     for(Function* method : stmt->methods)
     {
@@ -413,6 +437,11 @@ void Interpreter::visitClassStmt(Class* stmt)
 
     LoxClass* klass = new LoxClass(
         stmt->name->lexeme, superclassValue, methods);
+
+    if(superclass != nullptr)
+    {
+        environment = environment->getEnclosing();
+    }
 
     environment->assign(stmt->name, classToken(klass));
     return;

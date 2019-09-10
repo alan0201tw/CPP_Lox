@@ -19,6 +19,8 @@ public:
     Environment();
     Environment(Environment* _enclosing);
 
+    inline Environment* getEnclosing() { return enclosing; }
+
 private:
     std::map<std::string, Token*> values;
     // a pointer to the environment that contains this environment

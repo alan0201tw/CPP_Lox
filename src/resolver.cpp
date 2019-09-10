@@ -105,7 +105,14 @@ void Resolver::visitClassStmt(Class* stmt)
 
     if(stmt->superclass != nullptr)
     {
+        currentClass = ClassType::SUBCLASS;
         resolve(stmt->superclass);
+    }
+
+    if(stmt->superclass != nullptr)
+    {
+        beginScope();
+        scopes.back()->operator[]("super") = true;
     }
 
     // defining "this"
@@ -125,6 +132,11 @@ void Resolver::visitClassStmt(Class* stmt)
     }
 
     endScope();
+
+    if(stmt->superclass != nullptr)
+    {
+        endScope();
+    }
 
     currentClass = enclosingClass;
     return;
@@ -204,6 +216,21 @@ void Resolver::visitSetExpr(Set* expr)
 {
     resolve(expr->value);
     resolve(expr->object);
+    return;
+}
+
+void Resolver::visitSuperExpr(Super* expr)
+{
+    if(currentClass == ClassType::NONE)
+    {
+        Lox::error(expr->keyword, "Cannot use 'super' outside of a class.");
+    }
+    else if(currentClass != ClassType::SUBCLASS)
+    {
+        Lox::error(expr->keyword, "Cannot use 'super' in a class with no superclass.");
+    }
+
+    resolveLocal(expr, expr->keyword);
     return;
 }
 

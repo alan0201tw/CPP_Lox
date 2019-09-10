@@ -15,7 +15,7 @@ enum class FunctionType : short
 
 enum class ClassType : short
 {
-    NONE, CLASS
+    NONE, CLASS, SUBCLASS
 };
 
 class Resolver : public Expr::Visitor<void>, Stmt::Visitor<void>
@@ -55,7 +55,7 @@ public:
 
     virtual void visitGetExpr(Get* expr) override;// { throw std::logic_error("Function not yet implemented."); }
     virtual void visitSetExpr(Set* expr) override;// { throw std::logic_error("Function not yet implemented."); }
-    virtual void visitSuperExpr(Super* expr) override { throw std::logic_error("Function not yet implemented."); }
+    virtual void visitSuperExpr(Super* expr) override;// { throw std::logic_error("Function not yet implemented."); }
     virtual void visitThisExpr(This* expr) override;// { throw std::logic_error("Function not yet implemented."); }
 
     void resolve(std::vector<Stmt*> _statements);
