@@ -1,6 +1,6 @@
 # Lox
 
-Another practicing interpreter project by follow Bob Nystrom's Lox tutorial (jlox).
+Another practicing interpreter project by follow Bob Nystrom's jlox in [craftinginterpreters](http://www.craftinginterpreters.com).
 This is a C++ version.
 
 # Caution
@@ -12,5 +12,7 @@ Just like how Bob uses "final references" in java to prevent false assignment, w
 This project is also a warning for me, to remind me how bad codes will lower the effectiveness of debugging.
 
 # Reference
+
+[craftinginterpreters](http://www.craftinginterpreters.com)
 
 [UNIX exit_code](https://www.freebsd.org/cgi/man.cgi?query=sysexits&apropos=0&sektion=0&manpath=FreeBSD+4.3-RELEASE&format=html)
