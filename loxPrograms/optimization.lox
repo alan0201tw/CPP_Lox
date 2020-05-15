@@ -1,0 +1,25 @@
+fun foo(x)
+{
+    return -x*x*x + 3.0*x*x + 5*x + 7;
+}
+
+fun foo_d(x)
+{
+    return -3*x*x + 6*x + 5;
+}
+
+fun foo_dd(x)
+{
+    return -6*x + 6;
+}
+
+var x = 0;
+
+var loop = 10000;
+
+while(loop > 0)
+{
+    loop = loop - 1;
+    x = x - foo_d(x) / foo_dd(x);
+    print(x);
+}
